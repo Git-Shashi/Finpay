@@ -5,5 +5,5 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   # Companies create route
-  resources :companies, only: [:create]
+  resources :companies
 end

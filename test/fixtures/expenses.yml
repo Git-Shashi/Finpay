@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  category: one
+  amount: 9.99
+  description: MyText
+  expense_date: 2026-02-22
+  status: 1
+  resolved_at: 2026-02-22 10:43:01
+
+two:
+  user: two
+  category: two
+  amount: 9.99
+  description: MyText
+  expense_date: 2026-02-22
+  status: 1
+  resolved_at: 2026-02-22 10:43:01
