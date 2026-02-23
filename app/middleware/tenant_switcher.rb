@@ -19,7 +19,7 @@ class TenantSwitcher
     subdomain = request.subdomains.first
 
     # If no subdomain is present, tenant cannot be resolved
-    return tenant_not_found unless subdomain.present?
+    return tenant_not_found if subdomain.blank?
 
     schema_name = "company_#{subdomain}"
     company = Company.find_by(schema_name: schema_name)
