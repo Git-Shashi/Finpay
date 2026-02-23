@@ -29,6 +29,6 @@ module Finpay
 
     # --- Register custom middleware here ---
     config.middleware.use TenantSwitcher
-
+    config.action_dispatch.tld_length = 0
   end
 end

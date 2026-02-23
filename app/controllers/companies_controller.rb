@@ -15,7 +15,7 @@ class CompaniesController < ApplicationController
   # POST /companies
   def create
     company = Company.new(company_params)
-    company.schema_name = "company_#{SecureRandom.hex(4)}"
+   # company.schema_name = "company_#{SecureRandom.hex(4)}"
 
     if company.save
       Tenants::ProvisioningService.new(company).call
@@ -44,14 +44,18 @@ class CompaniesController < ApplicationController
   end
 
   private
-
+  # Set company for show, update, destroy actions
+  # If company not found, return 404 with error message "Company not found"
+  # And return from the method to prevent further execution 
+  # This ensures that if the company is not found, We don't need to worry about rerendering the response multiple times or executing code that depends on @company being set.
   def set_company
     @company = Company.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Company not found" }, status: :not_found
+    return
   end
 
   def company_params
-    params.require(:company).permit(:name)
-  end
+  params.require(:company).permit(:name, :subdomain)
+end
 end

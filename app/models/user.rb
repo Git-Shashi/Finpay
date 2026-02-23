@@ -1,8 +1,8 @@
 class User < ApplicationRecord
   belongs_to :department
-  has_many :expenses
+  has_many :expenses, dependent: :destroy
 
-  enum role: { admin: 0, employee: 1 }
+  enum :role, { admin: 0, employee: 1 }
 
   validates :name, :email, presence: true
 end

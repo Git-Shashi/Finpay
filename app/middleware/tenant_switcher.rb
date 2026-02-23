@@ -1,20 +1,49 @@
 class TenantSwitcher
+  PUBLIC_PATHS = %w[
+    /companies
+    /login
+    /signup
+    /health
+  ].freeze
+
   def initialize(app)
     @app = app
   end
 
   def call(env)
     request = ActionDispatch::Request.new(env)
-    company_id = request.headers['X-Company-Id']
 
-    if company_id.present?
-      company = Company.find(company_id)
+    # Skip tenant switching for public routes
+    return @app.call(env) if public_path?(request.path)
 
-      Apartment::Tenant.switch(company.schema_name) do
-        @app.call(env)
-      end
-    else
+    subdomain = request.subdomains.first
+
+    # If no subdomain is present, tenant cannot be resolved
+    return tenant_not_found unless subdomain.present?
+
+    schema_name = "company_#{subdomain}"
+    company = Company.find_by(schema_name: schema_name)
+
+    # If no company matches the derived schema, return 404
+    return tenant_not_found unless company
+
+    # Switch to tenant schema and continue request lifecycle
+    Apartment::Tenant.switch(company.schema_name) do
       @app.call(env)
     end
+  end
+
+  private
+
+  def public_path?(path)
+    PUBLIC_PATHS.any? { |p| path.start_with?(p) }
+  end
+
+  def tenant_not_found
+    [
+      404,
+      { 'Content-Type' => 'application/json' },
+      [{ error: 'Tenant not found' }.to_json]
+    ]
   end
 end
