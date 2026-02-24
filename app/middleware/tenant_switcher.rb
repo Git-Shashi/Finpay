@@ -16,10 +16,11 @@ class TenantSwitcher
     # Skip tenant switching for public routes
     return @app.call(env) if public_path?(request.path)
 
-    subdomain = request.subdomains.first
+     subdomain = request.headers['HTTP_X_COMPANY_ID'] || request.headers['X-Company-Id']
 
     # If no subdomain is present, tenant cannot be resolved
-    return tenant_not_found if subdomain.blank?
+    return tenant_not_found("X-Company-Id header missing") unless subdomain.present?
+
 
     schema_name = "company_#{subdomain}"
     company = Company.find_by(schema_name: schema_name)
