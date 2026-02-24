@@ -24,7 +24,8 @@ module Tenants
 
     def load_schema
       schema_path = Rails.root.join('db/schema.rb')
-      ActiveRecord::Base.connection.execute(File.read(schema_path))
+       ActiveRecord::Schema.verbose = false
+      load(schema_path)
     end
   end
 end
