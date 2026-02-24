@@ -49,7 +49,6 @@ class CompaniesController < ApplicationController
     @company = Company.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     render json: { error: 'Company not found' }, status: :not_found
-    
   end
 
   def company_params
