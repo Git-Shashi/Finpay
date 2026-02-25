@@ -5,4 +5,8 @@ class User < ApplicationRecord
   enum :role, { admin: 0, employee: 1 }
 
   validates :name, :email, presence: true
+  validates :email, uniqueness: true
+
+  devise :database_authenticatable,
+         :registerable
 end
