@@ -1,10 +1,7 @@
-class AddDeviseColumnsToUsers < ActiveRecord::Migration[7.0]
-  def change
-    add_column :users, :encrypted_password, :string, null: false, default: ""
-
-    add_column :users, :reset_password_token, :string
-    add_column :users, :reset_password_sent_at, :datetime
-
-    add_index :users, :reset_password_token, unique: true
+def change
+  change_table :users, bulk: true do |t|
+    t.string   :encrypted_password, null: false, default: ""
+    t.string   :reset_password_token
+    t.datetime :reset_password_sent_at
   end
 end
