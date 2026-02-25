@@ -14,7 +14,6 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
-  # config.secret_key = 'cf7ac97cbece5d0be412911c4efce1439f2e73650420aa007faadd716331b1f2a66bbf8a1622d44bdbb1d9ae775b96d8551776d814f2ec10abc85c59e4c1a695'
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
@@ -125,9 +124,6 @@ Devise.setup do |config|
   # a value of 20 is already extremely slow: approx. 60 seconds for 1 calculation).
   config.stretches = Rails.env.test? ? 1 : 12
 
-  # Set up a pepper to generate the hashed password.
-  # config.pepper = 'aaa4ff30077a889ebf3870dd6890154a11f0e16c2f4ca764170f2e2e1df5033e2c68e7b228ea8f0a05fa5ce54e0588bd5afa60561ea99f24a5c5bb1f07a05926'
-
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
 
@@ -178,7 +174,7 @@ Devise.setup do |config|
   # Options to be passed to the created cookie. For instance, you can set
   # secure: true in order to force SSL only cookies.
   # config.rememberable_options = {}
-  
+
   # ==> Configuration for :validatable
   config.navigational_formats = []
   # ==> Configuration for :validatable
@@ -317,17 +313,16 @@ Devise.setup do |config|
   # config.sign_in_after_change_password = true
 
   config.jwt do |jwt|
-  jwt.secret = Rails.application.credentials.devise_jwt_secret_key
+    jwt.secret = Rails.application.credentials.devise_jwt_secret_key
 
-  jwt.dispatch_requests = [
-    ['POST', %r{^/login$}]
-  ]
+    jwt.dispatch_requests = [
+      ['POST', %r{^/login$}]
+    ]
 
-  jwt.revocation_requests = [
-    ['DELETE', %r{^/logout$}]
-  ]
+    jwt.revocation_requests = [
+      ['DELETE', %r{^/logout$}]
+    ]
 
-  jwt.expiration_time = 1.day.to_i
-end
-
+    jwt.expiration_time = 1.day.to_i
+  end
 end
