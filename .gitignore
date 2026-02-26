@@ -25,5 +25,11 @@
 !/tmp/storage/
 !/tmp/storage/.keep
 
-# Ignore master key for decrypting credentials and more.
+
+
+# Rails credentials and dotenv
 /config/master.key
+.env
+.env.*
+
+credentials.yml.enc
