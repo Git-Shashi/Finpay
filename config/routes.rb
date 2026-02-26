@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     post   '/login',  to: 'users/sessions#create'
     delete '/logout', to: 'users/sessions#destroy'
   end
+  # Health check endpoint
   get '/health', to: 'application#health_check'
   # ---- Public routes ----
   resources :companies
@@ -19,3 +20,4 @@ Rails.application.routes.draw do
   resources :users
   resources :expenses
 end
+

@@ -3,3 +3,4 @@ class ApplicationController < ActionController::API
         render json: { status: 'ok' }, status: :ok
     end
 end
+
