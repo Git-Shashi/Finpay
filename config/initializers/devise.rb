@@ -14,6 +14,7 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # Devise will use the `secret_key_base` as its `secret_key`
   # by default. You can change it below and use your own secret key.
+  # config.secret_key = '4f46c032a102d8daa8fd302c0bed53c595261d7d5403f1e9ef02d0d66ce0561652939e5f33e3e94936e838d41ba4a06683fae583a7f15155328a16e24b3fee72'
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
@@ -124,6 +125,9 @@ Devise.setup do |config|
   # a value of 20 is already extremely slow: approx. 60 seconds for 1 calculation).
   config.stretches = Rails.env.test? ? 1 : 12
 
+  # Set up a pepper to generate the hashed password.
+  # config.pepper = 'c8887cb3de8c14d500ad382957d9229fdd39c4bacb1645b556d893907b4c55290bd0f0a1bd11342a8d351c9ed70608ceaca2739ca82ebb6900366adb20e79b6a'
+
   # Send a notification to the original email when the user's email is changed.
   # config.send_email_changed_notification = false
 
@@ -153,9 +157,6 @@ Devise.setup do |config|
   # initial account confirmation) to be applied. Requires additional unconfirmed_email
   # db field (see migrations). Until confirmed, new email is stored in
   # unconfirmed_email column, and copied to email column on successful confirmation.
-  # Also, when used in conjunction with `send_email_changed_notification`,
-  # the notification is sent to the original email when the change is requested,
-  # not when the unconfirmed email is confirmed.
   config.reconfirmable = true
 
   # Defines which key will be used when confirming an account
@@ -175,8 +176,6 @@ Devise.setup do |config|
   # secure: true in order to force SSL only cookies.
   # config.rememberable_options = {}
 
-  # ==> Configuration for :validatable
-  config.navigational_formats = []
   # ==> Configuration for :validatable
   # Range for password length.
   config.password_length = 6..128
@@ -278,9 +277,9 @@ Devise.setup do |config|
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.
   #
-  # config.warden do |warden_config|
-  #   warden_config.intercept_401 = false
-  #   warden_config.default_strategies(scope: :user).unshift :some_external_strategy
+  # config.warden do |manager|
+  #   manager.intercept_401 = false
+  #   manager.default_strategies(scope: :user).unshift :some_external_strategy
   # end
 
   # ==> Mountable engine configurations
@@ -311,18 +310,4 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
-
-  config.jwt do |jwt|
-    jwt.secret = ENV['DEVISE_JWT_SECRET_KEY']
-
-    jwt.dispatch_requests = [
-      ['POST', %r{^/login$}]
-    ]
-
-    jwt.revocation_requests = [
-      ['DELETE', %r{^/logout$}]
-    ]
-
-    jwt.expiration_time = 1.day.to_i
-  end
 end

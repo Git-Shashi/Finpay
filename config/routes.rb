@@ -1,23 +1,16 @@
 Rails.application.routes.draw do
-  # Mount Devise (no HTML routes)
-  devise_for :users,
-             skip: [:sessions, :registrations],
-             defaults: { format: :json }
+  # Devise Token Auth (ONLY authentication system)
+  mount_devise_token_auth_for 'User', at: 'auth'
 
-  # ---- JWT auth routes (INSIDE devise_scope) ----
-  devise_scope :user do
-    post   '/login',  to: 'users/sessions#create'
-    delete '/logout', to: 'users/sessions#destroy'
-  end
-  # Health check endpoint
+  # Health check
   get '/health', to: 'application#health_check'
-  # ---- Public routes ----
+
+  # Public routes
   resources :companies
 
-  # ---- Protected routes ----
+  # Protected routes (use authenticate_user!)
   resources :departments
   resources :categories
   resources :users
   resources :expenses
 end
-

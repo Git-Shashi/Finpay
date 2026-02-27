@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::API
-    def health_check
-        render json: { status: 'ok' }, status: :ok
-    end
+        include DeviseTokenAuth::Concerns::SetUserByToken
+   
 end
 
