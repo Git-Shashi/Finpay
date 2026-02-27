@@ -27,7 +27,7 @@ module Finpay
     config.api_only = true
    config.autoload_paths << Rails.root.join('app/middleware')
 
-        # Enable cookies and session middleware for Devise Token Auth
+    # Enable cookies and session middleware for Devise Token Auth
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
 

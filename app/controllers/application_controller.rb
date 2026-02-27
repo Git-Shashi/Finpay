@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
-        include DeviseTokenAuth::Concerns::SetUserByToken
+  include DeviseTokenAuth::Concerns::SetUserByToken
 
-        before_action :configure_permitted_parameters, if: :devise_token_auth_controller?
+  before_action :configure_permitted_parameters, if: :devise_token_auth_controller?
 
   protected
 
@@ -13,6 +13,4 @@ class ApplicationController < ActionController::API
   def devise_token_auth_controller?
     defined?(DeviseTokenAuth) && is_a?(DeviseTokenAuth::ApplicationController)
   end
-   
 end
-
