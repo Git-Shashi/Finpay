@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  # Devise modules (DECLARE ONCE)
+  # Devise modules 
   devise :database_authenticatable,
          :registerable,
          :recoverable,
@@ -9,6 +9,7 @@ class User < ApplicationRecord
   # Devise Token Auth
   include DeviseTokenAuth::Concerns::User
 
+  
   # Associations
   belongs_to :department
   has_many :expenses, dependent: :destroy
