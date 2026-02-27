@@ -1,14 +1,22 @@
 class User < ApplicationRecord
+  # Devise modules (DECLARE ONCE)
+  devise :database_authenticatable,
+         :registerable,
+         :recoverable,
+         :rememberable,
+         :validatable
+
+  # Devise Token Auth
+  include DeviseTokenAuth::Concerns::User
+
+  # Associations
   belongs_to :department
   has_many :expenses, dependent: :destroy
 
+  # Roles
   enum :role, { admin: 0, employee: 1 }
 
-  validates :name, :email, presence: true
-  validates :email, uniqueness: true
-
-  devise :database_authenticatable,
-         :registerable,
-         :jwt_authenticatable,
-         jwt_revocation_strategy: JwtDenylist
+  # Validations
+  validates :name, presence: true
+  validates :email, presence: true, uniqueness: true
 end
