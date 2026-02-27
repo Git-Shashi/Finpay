@@ -10,4 +10,3 @@ class Company < ApplicationRecord
     self.schema_name ||= "company_#{subdomain.parameterize}"
   end
 end
-
