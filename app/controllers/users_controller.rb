@@ -29,7 +29,10 @@ class UsersController < ApplicationController
     params.require(:user).permit(
       :name,
       :email,
-      :department_id
+      :password,
+      :password_confirmation,
+      :department_id,
+      :role
     )
   end
 end

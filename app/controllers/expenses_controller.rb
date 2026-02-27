@@ -1,4 +1,6 @@
 class ExpensesController < ApplicationController
+before_action :authenticate_user!
+
   def index
     render json: Expense.all
   end
@@ -8,7 +10,7 @@ class ExpensesController < ApplicationController
   end
 
   def create
-    expense = Expense.create!(expense_params)
+    expense = current_user.expenses.create!(expense_params)
     render json: expense, status: :created
   end
 
@@ -27,7 +29,6 @@ class ExpensesController < ApplicationController
 
   def expense_params
     params.require(:expense).permit(
-      :user_id,
       :category_id,
       :amount,
       :description,

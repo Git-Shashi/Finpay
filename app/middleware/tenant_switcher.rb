@@ -1,8 +1,6 @@
 class TenantSwitcher
   PUBLIC_PATHS = %w[
     /companies
-    /login
-    /signup
     /health
   ].freeze
 
