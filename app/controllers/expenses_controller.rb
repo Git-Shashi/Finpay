@@ -8,7 +8,7 @@ class ExpensesController < ApplicationController
   end
 
   def create
-    expense = Expense.create!(expense_params)
+    expense = current_user.expenses.create!(expense_params)
     render json: expense, status: :created
   end
 
@@ -27,7 +27,6 @@ class ExpensesController < ApplicationController
 
   def expense_params
     params.require(:expense).permit(
-      :user_id,
       :category_id,
       :amount,
       :description,
