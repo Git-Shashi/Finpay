@@ -1,4 +1,6 @@
 class ExpensesController < ApplicationController
+before_action :authenticate_user!
+
   def index
     render json: Expense.all
   end
