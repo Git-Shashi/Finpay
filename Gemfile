@@ -59,6 +59,10 @@ group :development, :test do
   gem "rubocop-performance", require: false
   gem 'dotenv-rails'
 
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  gem 'shoulda-matchers'
+
 end
 gem 'ros-apartment', require: 'apartment'
 
