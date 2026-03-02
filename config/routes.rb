@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
+  # Devise Token Auth (ONLY authentication system)
+  mount_devise_token_auth_for 'User', at: 'auth'
+
+  # Public routes
+  resources :companies
+
+  # Protected routes (use authenticate_user!)
   resources :departments
   resources :categories
   resources :users
   resources :expenses
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
-
-  # Companies create route
-  resources :companies
 end
