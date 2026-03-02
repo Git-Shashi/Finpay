@@ -33,3 +33,4 @@
 .env.*
 
 credentials.yml.enc
+.env
