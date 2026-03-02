@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_02_27_033406) do
+ActiveRecord::Schema[7.0].define(version: 2026_03_02_095230) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,19 @@ ActiveRecord::Schema[7.0].define(version: 2026_02_27_033406) do
     t.index ["user_id"], name: "index_expenses_on_user_id"
   end
 
+  create_table "receipts", force: :cascade do |t|
+    t.bigint "expense_id", null: false
+    t.string "file_url", null: false
+    t.string "file_name", null: false
+    t.string "file_type", null: false
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.date "receipt_date", null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expense_id"], name: "index_receipts_on_expense_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -80,5 +93,6 @@ ActiveRecord::Schema[7.0].define(version: 2026_02_27_033406) do
 
   add_foreign_key "expenses", "categories"
   add_foreign_key "expenses", "users"
+  add_foreign_key "receipts", "expenses"
   add_foreign_key "users", "departments"
 end
