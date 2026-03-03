@@ -17,5 +17,3 @@ Apartment.configure do |config|
   # config.persistent_schemas = %w[public]
 end
 
-# Setup subdomain-based tenant switching
-Rails.application.config.middleware.use Apartment::Elevators::Subdomain
