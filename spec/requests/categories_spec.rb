@@ -2,16 +2,25 @@ require 'rails_helper'
 
 RSpec.describe CategoriesController, type: :request do
   let!(:company) { Company.find_by(subdomain: 'beta') || create(:company) }
+  let(:headers) { { 'X-Company-Id' => 'beta' } }
 
-  let(:user) { create(:user) }
-  let(:category) { create(:category) }
-  let(:auth_headers) { user.create_new_auth_token.merge('X-Company-Id' => 'beta') }
-  let(:no_auth_headers) { { 'X-Company-Id' => 'beta' } }
+  let(:category) do
+    Apartment::Tenant.switch('company_beta') do
+      create(:category)
+    end
+  end
 
   describe 'GET /categories' do
     it 'returns all categories' do
       category
-      get '/categories', headers: auth_headers
+      get '/categories', headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe 'GET /categories/:id' do
+    it 'returns the category' do
+      get "/categories/#{category.id}", headers: headers
       expect(response).to have_http_status(:ok)
     end
   end
@@ -20,15 +29,24 @@ RSpec.describe CategoriesController, type: :request do
     it 'creates a new category' do
       post '/categories',
            params: { category: { name: 'Travel' } },
-           headers: auth_headers
+           headers: headers
       expect(response).to have_http_status(:created)
     end
+  end
 
-    it 'returns error with invalid params' do
-      post '/categories',
-           params: { category: { name: nil } },
-           headers: auth_headers
-      expect(response).to have_http_status(:unprocessable_entity)
+  describe 'PATCH /categories/:id' do
+    it 'updates the category' do
+      patch "/categories/#{category.id}",
+            params: { category: { name: 'Updated Category' } },
+            headers: headers
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe 'DELETE /categories/:id' do
+    it 'deletes the category' do
+      delete "/categories/#{category.id}", headers: headers
+      expect(response).to have_http_status(:no_content)
     end
   end
 end

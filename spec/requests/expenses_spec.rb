@@ -3,10 +3,21 @@ require 'rails_helper'
 RSpec.describe ExpensesController, type: :request do
   let!(:company) { Company.find_by(subdomain: 'beta') || create(:company) }
 
-  let(:user) { create(:user) }
-  let(:category) { create(:category) }
-  let(:expense) { create(:expense, user: user, category: category) }
-  let(:auth_headers) { user.create_new_auth_token.merge('X-Company-Id' => 'beta') }
+  let(:user) do
+  Apartment::Tenant.switch('company_beta') { create(:user) }
+end
+
+let(:category) do
+  Apartment::Tenant.switch('company_beta') { create(:category) }
+end
+
+let(:expense) do
+  Apartment::Tenant.switch('company_beta') { create(:expense, user: user, category: category) }
+end
+
+let(:auth_headers) do
+  Apartment::Tenant.switch('company_beta') { user.create_new_auth_token.merge('X-Company-Id' => 'beta') }
+end
   let(:no_auth_headers) { { 'X-Company-Id' => 'beta' } }
 
   describe 'GET /expenses' do
