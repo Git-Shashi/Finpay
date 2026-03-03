@@ -4,7 +4,7 @@ FactoryBot.define do
     file_name { "receipt.pdf" }
     file_type { "pdf" }
     amount { 100.0 }
-    receipt_date { Date.today }
+    receipt_date { Time.zone.today }
     notes { "Test receipt" }
     association :expense
   end

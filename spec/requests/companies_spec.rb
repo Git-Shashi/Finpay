@@ -29,9 +29,9 @@ RSpec.describe CompaniesController, type: :request do
     end
 
     it 'creates a new company' do
-      expect {
+      expect do
         post '/companies', params: valid_params
-      }.to change(Company, :count).by(1)
+      end.to change(Company, :count).by(1)
       expect(response).to have_http_status(:created)
     end
 
@@ -52,7 +52,7 @@ RSpec.describe CompaniesController, type: :request do
     it 'updates the company' do
       patch "/companies/#{company.id}", params: { company: { name: 'Updated Corp' } }
       expect(response).to have_http_status(:ok)
-      expect(JSON.parse(response.body)['name']).to eq('Updated Corp')
+      expect(response.parsed_body['name']).to eq('Updated Corp')
     end
 
     it 'returns not found for invalid id' do
@@ -67,13 +67,15 @@ RSpec.describe CompaniesController, type: :request do
     end
 
     before do
-      Apartment::Tenant.create(company.schema_name) rescue nil
+      Apartment::Tenant.create(company.schema_name)
+    rescue StandardError
+      nil
     end
 
     it 'deletes the company' do
-      expect {
+      expect do
         delete "/companies/#{company.id}"
-      }.to change(Company, :count).by(-1)
+      end.to change(Company, :count).by(-1)
       expect(response).to have_http_status(:ok)
     end
 

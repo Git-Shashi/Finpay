@@ -57,7 +57,7 @@ RSpec.describe ReceiptsController, type: :request do
           file_name: 'receipt.pdf',
           file_type: 'pdf',
           amount: 50.0,
-          receipt_date: Date.today
+          receipt_date: Time.zone.today
         }
       }
     end

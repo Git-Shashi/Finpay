@@ -9,14 +9,14 @@ class ExpensesController < ApplicationController
     render json: ExpenseSerializer.new(Expense.find(params[:id])).serialize
   end
 
- def create
-  expense = current_user.expenses.build(expense_params)
-  if expense.save
-    render json: ExpenseSerializer.new(expense).serialize, status: :created
-  else
-    render json: { errors: expense.errors.full_messages }, status: :unprocessable_entity
+  def create
+    expense = current_user.expenses.build(expense_params)
+    if expense.save
+      render json: ExpenseSerializer.new(expense).serialize, status: :created
+    else
+      render json: { errors: expense.errors.full_messages }, status: :unprocessable_entity
+    end
   end
-end
 
   def update
     expense = Expense.find(params[:id])
