@@ -10,4 +10,5 @@ Rails.application.routes.draw do
   resources :categories
   resources :users
   resources :expenses
+  resources :receipts, only: [:index, :create, :destroy]
 end
