@@ -52,9 +52,7 @@ class CompaniesController < ApplicationController
   private
 
   def company
-    return @company if defined?(@company)
-
-    @company = Company.find_by(id: params[:id])
+    @company ||= Company.find_by(id: params[:id])
   end
 
   def company_params

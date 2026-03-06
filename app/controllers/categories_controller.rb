@@ -44,9 +44,7 @@ class CategoriesController < ApplicationController
   private
 
   def category
-    return @category if defined?(@category)
-
-    @category = Category.find_by(id: params[:id])
+    @category ||= Category.find_by(id: params[:id])
   end
 
   def category_params

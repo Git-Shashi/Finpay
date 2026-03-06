@@ -44,9 +44,7 @@ class ExpensesController < ApplicationController
   private
 
   def expense
-    return @expense if defined?(@expense)
-
-    @expense = Expense.find_by(id: params[:id])
+  @expense ||= Expense.find_by(id: params[:id])
   end
 
   def expense_params

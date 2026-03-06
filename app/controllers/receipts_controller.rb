@@ -32,9 +32,7 @@ class ReceiptsController < ApplicationController
   private
 
   def receipt
-    return @receipt if defined?(@receipt)
-
-    @receipt = Receipt.find_by(id: params[:id])
+  @receipt ||= Receipt.find_by(id: params[:id])
   end
 
   def receipt_params
