@@ -38,7 +38,7 @@ class DepartmentsController < ApplicationController
   private
 
   def department
-  @department ||= Department.find_by(id: params[:id])
+  @department ||= Department.find(id: params[:id])
   end
 
   def department_params
