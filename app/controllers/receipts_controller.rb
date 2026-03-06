@@ -3,8 +3,12 @@ class ReceiptsController < ApplicationController
   before_action :set_receipt, only: [:destroy, :show]
 
   def index
-    receipts=Receipt.all
+    receipts = Receipt.all
     render json: ReceiptSerializer.new(receipts).serialize
+  end
+  
+  def show
+    render json: ReceiptSerializer.new(@receipt).serialize
   end
 
   def create

@@ -66,7 +66,7 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
   config.include FactoryBot::Syntax::Methods
-    config.before(:suite) do
+  config.before(:suite) do
     company = Company.find_or_create_by!(subdomain: 'beta') do |c|
       c.name = 'Beta Corp'
     end

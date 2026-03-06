@@ -3,12 +3,12 @@ class ExpensesController < ApplicationController
   before_action :set_expense, only: [:show, :update, :destroy]
 
   def index
-    expenses=Expense.all
+    expenses = Expense.all
     render json: ExpenseSerializer.new(expenses).serialize
   end
 
   def show
-    expense=Expense.find(params[:id])
+    expense = Expense.find(params[:id])
     render json: ExpenseSerializer.new(expense).serialize
   end
 
