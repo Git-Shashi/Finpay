@@ -1,8 +1,10 @@
 class ReceiptsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_receipt, only: [:destroy, :show]
 
   def index
-    render json: ReceiptSerializer.new(Receipt.all).serialize
+    receipts=Receipt.all
+    render json: ReceiptSerializer.new().serialize
   end
 
   def create
@@ -17,6 +19,9 @@ class ReceiptsController < ApplicationController
   end
 
   private
+
+  def set_receipt
+    @receipt = Receipt.find(params[:id])
 
   def receipt_params
     params.require(:receipt).permit(:file_url, :file_name, :file_type, :amount, :receipt_date, :notes)
