@@ -1,29 +1,45 @@
 class DepartmentsController < ApplicationController
   def index
-    render json: Department.all
+    departments = Department.all
+    render json: DepartmentSerializer.new(departments).serialize
   end
 
   def show
-    render json: Department.find(params[:id])
+    if department
+      render json: DepartmentSerializer.new(department).serialize
+    else
+      render json: { error: 'Department not found' }, status: :not_found
+    end
   end
 
   def create
     department = Department.create!(department_params)
-    render json: department, status: :created
+    render json: DepartmentSerializer.new(department).serialize, status: :created
   end
 
   def update
-    department = Department.find(params[:id])
-    department.update!(department_params)
-    render json: department
+    if department
+      department.update!(department_params)
+      render json: DepartmentSerializer.new(department).serialize
+    else
+      render json: { error: 'Department not found' }, status: :not_found
+    end
   end
 
   def destroy
-    Department.find(params[:id]).destroy
-    head :no_content
+    if department
+      department.destroy
+      head :no_content
+    else
+      render json: { error: 'Department not found' }, status: :not_found
+    end
   end
 
   private
+
+  def department
+  @department ||= Department.find(params[:id])
+  end
 
   def department_params
     params.require(:department).permit(:name)

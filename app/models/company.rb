@@ -7,6 +7,8 @@ class Company < ApplicationRecord
   private
 
   def generate_schema_name
+    return if subdomain.blank?
+
     self.schema_name ||= "company_#{subdomain.parameterize}"
   end
 end
