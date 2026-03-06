@@ -1,12 +1,15 @@
 class ExpensesController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_expense, only: [:show, :update, :destroy]
 
   def index
-    render json: ExpenseSerializer.new(Expense.all).serialize
+    expenses=Expense.all
+    render json: ExpenseSerializer.new(expenses).serialize
   end
 
   def show
-    render json: ExpenseSerializer.new(Expense.find(params[:id])).serialize
+    expense=Expense.find(params[:id])
+    render json: ExpenseSerializer.new(expense).serialize
   end
 
   def create
@@ -30,6 +33,10 @@ class ExpensesController < ApplicationController
   end
 
   private
+
+  def set_expense
+    @expense = Expense.find(params[:id])
+  end
 
   def expense_params
     params.require(:expense).permit(:category_id, :amount, :description, :expense_date)
