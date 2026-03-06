@@ -1,6 +1,4 @@
 class CompaniesController < ApplicationController
-  
-
   # GET /companies
   def index
     companies = Company.all
@@ -9,13 +7,13 @@ class CompaniesController < ApplicationController
 
   # GET /companies/:id
   def show
-  company = Company.find_by(id: params[:id])
-  if company
-    render json: CompanySerializer.new(company).serialize, status: :ok
-  else
-    render json: { error: 'Company not found' }, status: :not_found
+    company = Company.find_by(id: params[:id])
+    if company
+      render json: CompanySerializer.new(company).serialize, status: :ok
+    else
+      render json: { error: 'Company not found' }, status: :not_found
+    end
   end
-end
 
   # POST /companies
   def create
@@ -32,29 +30,29 @@ end
 
   # PATCH/PUT /companies/:id
   def update
-  company = Company.find_by(id: params[:id])
-  if company
-    if company.update(company_params)
-      render json: CompanySerializer.new(company).serialize, status: :ok
+    company = Company.find_by(id: params[:id])
+    if company
+      if company.update(company_params)
+        render json: CompanySerializer.new(company).serialize, status: :ok
+      else
+        render json: { errors: company.errors.full_messages }, status: :unprocessable_entity
+      end
     else
-      render json: { errors: company.errors.full_messages }, status: :unprocessable_entity
+      render json: { error: 'Company not found' }, status: :not_found
     end
-  else
-    render json: { error: 'Company not found' }, status: :not_found
   end
-end
 
   # DELETE /companies/:id
   def destroy
-  company = Company.find_by(id: params[:id])
-  if company
-    Apartment::Tenant.drop(company.schema_name) if company.schema_name.present?
-    company.destroy
-    render json: { message: 'Company deleted successfully' }, status: :ok
-  else
-    render json: { error: 'Company not found' }, status: :not_found
+    company = Company.find_by(id: params[:id])
+    if company
+      Apartment::Tenant.drop(company.schema_name) if company.schema_name.present?
+      company.destroy
+      render json: { message: 'Company deleted successfully' }, status: :ok
+    else
+      render json: { error: 'Company not found' }, status: :not_found
+    end
   end
-end
 
   private
 

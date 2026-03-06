@@ -1,6 +1,4 @@
 class DepartmentsController < ApplicationController
- 
-
   def index
     departments = Department.all
     render json: DepartmentSerializer.new(departments).serialize
@@ -28,12 +26,13 @@ class DepartmentsController < ApplicationController
   private
 
   def department
-  @department ||= Department.find(params[:id])
-rescue ActiveRecord::RecordNotFound
-  render json: { error: 'Department not found' }, status: :not_found
-end
+    @department ||= Department.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Department not found' }, status: :not_found
+  end
 
   def department_params
     params.require(:department).permit(:name)
   end
 end
+

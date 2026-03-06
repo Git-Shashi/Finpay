@@ -1,6 +1,5 @@
 class ExpensesController < ApplicationController
   before_action :authenticate_user!
-  
 
   def index
     expenses = Expense.all
@@ -8,8 +7,8 @@ class ExpensesController < ApplicationController
   end
 
   def show
-  render json: ExpenseSerializer.new(expense).serialize
-end
+    render json: ExpenseSerializer.new(expense).serialize
+  end
 
   def create
     expense = current_user.expenses.build(expense_params)
@@ -21,22 +20,22 @@ end
   end
 
   def update
-  expense.update!(expense_params)
-  render json: ExpenseSerializer.new(expense).serialize
-end
+    expense.update!(expense_params)
+    render json: ExpenseSerializer.new(expense).serialize
+  end
 
   def destroy
-  expense.destroy
-  head :no_content
-end
+    expense.destroy
+    head :no_content
+  end
 
   private
 
   def expense
-  @expense ||= Expense.find(params[:id])
-rescue ActiveRecord::RecordNotFound
-  render json: { error: 'Expense not found' }, status: :not_found
-end
+    @expense ||= Expense.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Expense not found' }, status: :not_found
+  end
 
   def expense_params
     params.require(:expense).permit(:category_id, :amount, :description, :expense_date)

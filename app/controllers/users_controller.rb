@@ -1,24 +1,12 @@
 class UsersController < ApplicationController
-  
-
   def index
     users = User.all
     render json: UserSerializer.new(users).serialize
   end
 
   def show
-  render json: UserSerializer.new(user).serialize
-end
-
-def update
-  user.update!(user_params)
-  render json: UserSerializer.new(user).serialize
-end
-
-def destroy
-  user.destroy
-  head :no_content
-end
+    render json: UserSerializer.new(user).serialize
+  end
 
   def create
     user = User.create!(user_params)
@@ -26,20 +14,21 @@ end
   end
 
   def update
-    user = User.find(params[:id])
     user.update!(user_params)
     render json: UserSerializer.new(user).serialize
   end
 
   def destroy
-    User.find(params[:id]).destroy
+    user.destroy
     head :no_content
   end
 
   private
 
   def user
-    @user ||= User.find_by(id: params[:id])
+    return @user if defined?(@user)
+
+    @user = User.find_by(id: params[:id])
   end
 
   def user_params

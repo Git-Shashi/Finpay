@@ -1,6 +1,5 @@
 class ReceiptsController < ApplicationController
   before_action :authenticate_user!
-  
 
   def index
     receipts = Receipt.all
@@ -25,10 +24,10 @@ class ReceiptsController < ApplicationController
   private
 
   def receipt
-  @receipt ||= Receipt.find(params[:id])
-rescue ActiveRecord::RecordNotFound
-  render json: { error: 'Receipt not found' }, status: :not_found
-end
+    @receipt ||= Receipt.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Receipt not found' }, status: :not_found
+  end
 
   def receipt_params
     params.require(:receipt).permit(:file_url, :file_name, :file_type, :amount, :receipt_date, :notes)
