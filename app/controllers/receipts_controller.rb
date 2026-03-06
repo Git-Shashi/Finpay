@@ -4,7 +4,7 @@ class ReceiptsController < ApplicationController
 
   def index
     receipts=Receipt.all
-    render json: ReceiptSerializer.new().serialize
+    render json: ReceiptSerializer.new(receipts).serialize
   end
 
   def create
@@ -22,6 +22,7 @@ class ReceiptsController < ApplicationController
 
   def set_receipt
     @receipt = Receipt.find(params[:id])
+  end
 
   def receipt_params
     params.require(:receipt).permit(:file_url, :file_name, :file_type, :amount, :receipt_date, :notes)
