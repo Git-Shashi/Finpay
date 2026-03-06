@@ -5,7 +5,11 @@ class DepartmentsController < ApplicationController
   end
 
   def show
-    render json: DepartmentSerializer.new(department).serialize
+    if department
+      render json: DepartmentSerializer.new(department).serialize
+    else
+      render json: { error: 'Department not found' }, status: :not_found
+    end
   end
 
   def create
@@ -14,25 +18,30 @@ class DepartmentsController < ApplicationController
   end
 
   def update
-    department.update!(department_params)
-    render json: DepartmentSerializer.new(department).serialize
+    if department
+      department.update!(department_params)
+      render json: DepartmentSerializer.new(department).serialize
+    else
+      render json: { error: 'Department not found' }, status: :not_found
+    end
   end
 
   def destroy
-    department.destroy
-    head :no_content
+    if department
+      department.destroy
+      head :no_content
+    else
+      render json: { error: 'Department not found' }, status: :not_found
+    end
   end
 
   private
 
   def department
-    @department ||= Department.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Department not found' }, status: :not_found
+    @department ||= Department.find_by(id: params[:id])
   end
 
   def department_params
     params.require(:department).permit(:name)
   end
 end
-

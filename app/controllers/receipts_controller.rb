@@ -7,7 +7,11 @@ class ReceiptsController < ApplicationController
   end
 
   def show
-    render json: ReceiptSerializer.new(receipt).serialize
+    if receipt
+      render json: ReceiptSerializer.new(receipt).serialize
+    else
+      render json: { error: 'Receipt not found' }, status: :not_found
+    end
   end
 
   def create
@@ -17,16 +21,18 @@ class ReceiptsController < ApplicationController
   end
 
   def destroy
-    receipt.destroy
-    head :no_content
+    if receipt
+      receipt.destroy
+      head :no_content
+    else
+      render json: { error: 'Receipt not found' }, status: :not_found
+    end
   end
 
   private
 
   def receipt
-    @receipt ||= Receipt.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Receipt not found' }, status: :not_found
+    @receipt ||= Receipt.find_by(id: params[:id])
   end
 
   def receipt_params

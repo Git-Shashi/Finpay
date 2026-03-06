@@ -7,7 +7,11 @@ class ExpensesController < ApplicationController
   end
 
   def show
-    render json: ExpenseSerializer.new(expense).serialize
+    if expense
+      render json: ExpenseSerializer.new(expense).serialize
+    else
+      render json: { error: 'Expense not found' }, status: :not_found
+    end
   end
 
   def create
@@ -20,21 +24,27 @@ class ExpensesController < ApplicationController
   end
 
   def update
-    expense.update!(expense_params)
-    render json: ExpenseSerializer.new(expense).serialize
+    if expense
+      expense.update!(expense_params)
+      render json: ExpenseSerializer.new(expense).serialize
+    else
+      render json: { error: 'Expense not found' }, status: :not_found
+    end
   end
 
   def destroy
-    expense.destroy
-    head :no_content
+    if expense
+      expense.destroy
+      head :no_content
+    else
+      render json: { error: 'Expense not found' }, status: :not_found
+    end
   end
 
   private
 
   def expense
-    @expense ||= Expense.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Expense not found' }, status: :not_found
+    @expense ||= Expense.find_by(id: params[:id])
   end
 
   def expense_params

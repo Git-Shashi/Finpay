@@ -5,7 +5,11 @@ class UsersController < ApplicationController
   end
 
   def show
-    render json: UserSerializer.new(user).serialize
+    if user
+      render json: UserSerializer.new(user).serialize
+    else
+      render json: { error: 'User not found' }, status: :not_found
+    end
   end
 
   def create
@@ -14,21 +18,27 @@ class UsersController < ApplicationController
   end
 
   def update
-    user.update!(user_params)
-    render json: UserSerializer.new(user).serialize
+    if user
+      user.update!(user_params)
+      render json: UserSerializer.new(user).serialize
+    else
+      render json: { error: 'User not found' }, status: :not_found
+    end
   end
 
   def destroy
-    user.destroy
-    head :no_content
+    if user
+      user.destroy
+      head :no_content
+    else
+      render json: { error: 'User not found' }, status: :not_found
+    end
   end
 
   private
 
   def user
-    return @user if defined?(@user)
-
-    @user = User.find_by(id: params[:id])
+    @user ||= User.find_by(id: params[:id])
   end
 
   def user_params

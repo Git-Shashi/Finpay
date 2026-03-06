@@ -7,7 +7,7 @@ class CompaniesController < ApplicationController
 
   # GET /companies/:id
   def show
-    company = Company.find_by(id: params[:id])
+   
     if company
       render json: CompanySerializer.new(company).serialize, status: :ok
     else
@@ -18,19 +18,17 @@ class CompaniesController < ApplicationController
   # POST /companies
   def create
     company = Company.new(company_params)
-
     if company.save
       Tenants::ProvisioningService.new(company).call
       render json: CompanySerializer.new(company).serialize, status: :created
     else
-      render json: { errors: company.errors.full_messages },
-             status: :unprocessable_entity
+      render json: { errors: company.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /companies/:id
   def update
-    company = Company.find_by(id: params[:id])
+   
     if company
       if company.update(company_params)
         render json: CompanySerializer.new(company).serialize, status: :ok
@@ -44,7 +42,7 @@ class CompaniesController < ApplicationController
 
   # DELETE /companies/:id
   def destroy
-    company = Company.find_by(id: params[:id])
+    
     if company
       Apartment::Tenant.drop(company.schema_name) if company.schema_name.present?
       company.destroy
@@ -57,9 +55,7 @@ class CompaniesController < ApplicationController
   private
 
   def company
-    @company ||= Company.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Company not found' }, status: :not_found
+    @company ||= Company.find_by(id: params[:id])
   end
 
   def company_params

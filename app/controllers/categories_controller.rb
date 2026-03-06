@@ -1,29 +1,51 @@
 class CategoriesController < ApplicationController
   def index
-    render json: Category.all
+    render json: CategorySerializer.new(Category.all).serialize
   end
 
   def show
-    render json: Category.find(params[:id])
+    if category
+      render json: CategorySerializer.new(category).serialize
+    else
+      render json: { error: 'Category not found' }, status: :not_found
+    end
   end
 
   def create
-    category = Category.create!(category_params)
-    render json: category, status: :created
+    category = Category.new(category_params)
+    if category.save
+      render json: CategorySerializer.new(category).serialize, status: :created
+    else
+      render json: { errors: category.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   def update
-    category = Category.find(params[:id])
-    category.update!(category_params)
-    render json: category
+    if category
+      if category.update(category_params)
+        render json: CategorySerializer.new(category).serialize
+      else
+        render json: { errors: category.errors.full_messages }, status: :unprocessable_entity
+      end
+    else
+      render json: { error: 'Category not found' }, status: :not_found
+    end
   end
 
   def destroy
-    Category.find(params[:id]).destroy
-    head :no_content
+    if category
+      category.destroy
+      head :no_content
+    else
+      render json: { error: 'Category not found' }, status: :not_found
+    end
   end
 
   private
+
+  def category
+    @category ||= Category.find_by(id: params[:id])
+  end
 
   def category_params
     params.require(:category).permit(:name)
