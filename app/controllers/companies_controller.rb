@@ -4,12 +4,12 @@ class CompaniesController < ApplicationController
   # GET /companies
   def index
     companies = Company.all
-    render json: companies, status: :ok
+    render json: CompanySerializer.new(companies).serialize, status: :ok
   end
 
   # GET /companies/:id
   def show
-    render json: @company, status: :ok
+    render json: CompanySerializer.new(@company).serialize, status: :ok
   end
 
   # POST /companies
@@ -18,7 +18,7 @@ class CompaniesController < ApplicationController
 
     if company.save
       Tenants::ProvisioningService.new(company).call
-      render json: company, status: :created
+      render json: CompanySerializer.new(company).serialize, status: :created
     else
       render json: { errors: company.errors.full_messages },
              status: :unprocessable_entity
@@ -28,7 +28,7 @@ class CompaniesController < ApplicationController
   # PATCH/PUT /companies/:id
   def update
     if @company.update(company_params)
-      render json: @company, status: :ok
+      render json: CompanySerializer.new(@company).serialize, status: :ok
     else
       render json: { errors: @company.errors.full_messages },
              status: :unprocessable_entity

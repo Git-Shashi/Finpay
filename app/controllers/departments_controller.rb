@@ -1,29 +1,35 @@
 class DepartmentsController < ApplicationController
+    before_action :set_department, only: [:show, :update, :destroy]
+
   def index
-    render json: Department.all
+    departments = Department.all
+    render json: DepartmentSerializer.new(departments).serialize
   end
 
   def show
-    render json: Department.find(params[:id])
+    
+    render json: DepartmentSerializer.new(@department).serialize
   end
 
   def create
     department = Department.create!(department_params)
-    render json: department, status: :created
+    render json: DepartmentSerializer.new(department).serialize, status: :created
   end
 
   def update
-    department = Department.find(params[:id])
-    department.update!(department_params)
-    render json: department
+    @department.update!(department_params)
+    render json: DepartmentSerializer.new(@department).serialize
   end
 
   def destroy
-    Department.find(params[:id]).destroy
-    head :no_content
+  @department.destroy
+  head :no_content
   end
 
   private
+  def set_department
+    @department = Department.find(params[:id])
+  end
 
   def department_params
     params.require(:department).permit(:name)
