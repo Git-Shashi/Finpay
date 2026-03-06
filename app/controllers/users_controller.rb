@@ -38,7 +38,9 @@ class UsersController < ApplicationController
   private
 
   def user
-    @user ||= User.find_by(id: params[:id])
+    return @user if defined?(@user)
+
+    @user = User.find_by(id: params[:id])
   end
 
   def user_params

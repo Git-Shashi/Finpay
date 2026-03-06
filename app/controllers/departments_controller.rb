@@ -38,7 +38,9 @@ class DepartmentsController < ApplicationController
   private
 
   def department
-    @department ||= Department.find_by(id: params[:id])
+    return @department if defined?(@department)
+
+    @department = Department.find_by(id: params[:id])
   end
 
   def department_params

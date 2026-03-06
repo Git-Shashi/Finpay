@@ -3,4 +3,3 @@ class CompanySerializer
 
   attributes :id, :name, :subdomain
 end
-
