@@ -52,7 +52,7 @@ class CompaniesController < ApplicationController
   private
 
   def company
-    @company ||= Company.find(id: params[:id])
+    @company ||= Company.find(params[:id])
   end
 
   def company_params

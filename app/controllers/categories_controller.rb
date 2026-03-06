@@ -44,7 +44,7 @@ class CategoriesController < ApplicationController
   private
 
   def category
-    @category ||= Category.find(id: params[:id])
+    @category ||= Category.find(params[:id])
   end
 
   def category_params

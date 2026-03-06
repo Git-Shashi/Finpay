@@ -44,7 +44,7 @@ class ExpensesController < ApplicationController
   private
 
   def expense
-  @expense ||= Expense.find(id: params[:id])
+  @expense ||= Expense.find(params[:id])
   end
 
   def expense_params
