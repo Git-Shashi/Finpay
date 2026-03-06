@@ -1,14 +1,14 @@
 class ReceiptsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_receipt, only: [:destroy, :show]
+  
 
   def index
     receipts = Receipt.all
     render json: ReceiptSerializer.new(receipts).serialize
   end
-  
+
   def show
-    render json: ReceiptSerializer.new(@receipt).serialize
+    render json: ReceiptSerializer.new(receipt).serialize
   end
 
   def create
@@ -18,15 +18,17 @@ class ReceiptsController < ApplicationController
   end
 
   def destroy
-    Receipt.find(params[:id]).destroy
+    receipt.destroy
     head :no_content
   end
 
   private
 
-  def set_receipt
-    @receipt = Receipt.find(params[:id])
-  end
+  def receipt
+  @receipt ||= Receipt.find(params[:id])
+rescue ActiveRecord::RecordNotFound
+  render json: { error: 'Receipt not found' }, status: :not_found
+end
 
   def receipt_params
     params.require(:receipt).permit(:file_url, :file_name, :file_type, :amount, :receipt_date, :notes)
