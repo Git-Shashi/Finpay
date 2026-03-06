@@ -1,21 +1,25 @@
 class UsersController < ApplicationController
+  before_action :set_user, only: [:show, :update, :destroy]
+
   def index
-    render json: User.all
+    users = User.all
+    render json: UserSerializer.new(users).serialize
   end
 
   def show
-    render json: User.find(params[:id])
+    user = User.find(params[:id])
+    render json: UserSerializer.new(user).serialize
   end
 
   def create
     user = User.create!(user_params)
-    render json: user, status: :created
+    render json: UserSerializer.new(user).serialize, status: :created
   end
 
   def update
     user = User.find(params[:id])
     user.update!(user_params)
-    render json: user
+    render json: UserSerializer.new(user).serialize
   end
 
   def destroy
@@ -24,6 +28,9 @@ class UsersController < ApplicationController
   end
 
   private
+  def set_user
+  @user = User.find(params[:id])
+  end
 
   def user_params
     params.require(:user).permit(
