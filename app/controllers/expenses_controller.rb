@@ -2,8 +2,20 @@ class ExpensesController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    expenses = Expense.all
-    render json: ExpenseSerializer.new(expenses).serialize
+    expenses = Expense.includes(:user, :category, :receipts).all
+
+    expenses = expenses.by_category(params[:category_id]) if params[:category_id].present?
+    expenses = expenses.by_status(params[:status]) if params[:status].present?
+
+    if params[:start_date].present? && params[:end_date].present?
+      expenses = expenses.by_date_range(params[:start_date], params[:end_date])
+    end
+    expenses = expenses.page(params[:page]).per(params[:per_page] || 10)
+
+    render json: {
+      expenses: ExpenseListSerializer.new(expenses).serialize,
+      pagination: pagination_meta(expenses)
+    }, status: :ok
   end
 
   def show
@@ -49,5 +61,15 @@ class ExpensesController < ApplicationController
 
   def expense_params
     params.require(:expense).permit(:category_id, :amount, :description, :expense_date)
+  end
+
+  def pagination_meta(expenses)
+    {
+      current_page: expenses.current_page,
+      next_page: expenses.next_page,
+      prev_page: expenses.prev_page,
+      total_pages: expenses.total_pages,
+      total_count: expenses.total_count
+    }
   end
 end
