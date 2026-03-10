@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   resources :departments
   resources :categories
   resources :users
-  resources :expenses do 
+  resources :expenses do
     member do
       post :approve
       post :reject

@@ -6,6 +6,7 @@ class ExpenseWorkflowService
 
   def approve!
     return false unless can_approve?
+
     from_state = @expense.aasm_state
     @expense.approved_by = @user
     @expense.approve!
@@ -13,8 +14,9 @@ class ExpenseWorkflowService
     true
   end
 
-  def reject!(reason = nil)
+  def reject!(_reason = nil)
     return false unless can_approve?
+
     from_state = @expense.aasm_state
     @expense.approved_by = @user
     @expense.reject!
@@ -24,6 +26,7 @@ class ExpenseWorkflowService
 
   def reimburse!
     return false unless can_reimburse?
+
     from_state = @expense.aasm_state
     @expense.reimburse!
     @expense.record_transition(from_state, 'reimbursed')
