@@ -1,26 +1,20 @@
 class ExpenseListSerializer
-  def initialize(expenses)
-    @expenses = expenses
+  include Alba::Resource
+
+  attributes :id, :amount, :description, :expense_date, :status
+
+  one :category do
+    attributes :id, :name
   end
 
-  def serialize
-    @expenses.map do |expense|
-      {
-        id: expense.id,
-        amount: expense.amount,
-        description: expense.description,
-        expense_date: expense.expense_date,
-        status: expense.status,
-        category: {
-          id: expense.category&.id,
-          name: expense.category&.name
-        },
-        user: {
-          id: expense.user&.id,
-          name: expense.user&.name
-        },
-        receipts: expense.receipts.map { |r| { id: r.id, url: r.file_url } }
-      }
+  one :user do
+    attributes :id, :name
+  end
+
+  many :receipts do
+    attribute :id
+    attribute :url do |receipt|
+      receipt.file_url
     end
   end
 end
