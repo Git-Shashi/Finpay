@@ -6,14 +6,14 @@ class ExpensesController < ApplicationController
     expenses = expenses.page(params[:page]).per(params[:per_page] || 10)
 
     render json: {
-      expenses: ExpenseListSerializer.new(expenses).serialize,
+      expenses: ExpenseListSerializer.new(expenses).as_json,
       pagination: pagination_meta(expenses)
     }, status: :ok
   end
 
   def show
     if expense
-      render json: ExpenseSerializer.new(expense).serialize
+      render json: ExpenseSerializer.new(expense).as_json
     else
       render json: { error: 'Expense not found' }, status: :not_found
     end
@@ -22,7 +22,7 @@ class ExpensesController < ApplicationController
   def create
     expense = current_user.expenses.build(expense_params)
     if expense.save
-      render json: ExpenseSerializer.new(expense).serialize, status: :created
+      render json: ExpenseSerializer.new(expense).as_json, status: :created
     else
       render json: { errors: expense.errors.full_messages }, status: :unprocessable_entity
     end
@@ -31,7 +31,7 @@ class ExpensesController < ApplicationController
   def update
     if expense
       expense.update!(expense_params)
-      render json: ExpenseSerializer.new(expense).serialize
+      render json: ExpenseSerializer.new(expense).as_json
     else
       render json: { error: 'Expense not found' }, status: :not_found
     end
@@ -39,7 +39,7 @@ class ExpensesController < ApplicationController
   def approve
   service = ExpenseWorkflowService.new(expense, current_user)
   if service.approve!
-    render json: ExpenseSerializer.new(expense).serialize, status: :ok
+    render json: ExpenseSerializer.new(expense).as_json, status: :ok
   else
     render json: { error: 'Not authorized or invalid state' }, status: :forbidden
   end
@@ -48,7 +48,7 @@ end
 def reject
   service = ExpenseWorkflowService.new(expense, current_user)
   if service.reject!(params[:reason])
-    render json: ExpenseSerializer.new(expense).serialize, status: :ok
+    render json: ExpenseSerializer.new(expense).as_json, status: :ok
   else
     render json: { error: 'Not authorized or invalid state' }, status: :forbidden
   end
@@ -56,7 +56,7 @@ end
 def reimburse
   service = ExpenseWorkflowService.new(expense, current_user)
   if service.reimburse!
-    render json: ExpenseSerializer.new(expense).serialize, status: :ok
+    render json: ExpenseSerializer.new(expense).as_json, status: :ok
   else
     render json: { error: 'Not authorized or invalid state' }, status: :forbidden
   end
@@ -65,7 +65,7 @@ end
 def archive
   service = ExpenseWorkflowService.new(expense, current_user)
   if service.archive!
-    render json: ExpenseSerializer.new(expense).serialize, status: :ok
+    render json: ExpenseSerializer.new(expense).as_json, status: :ok
   else
     render json: { error: 'Invalid state' }, status: :unprocessable_entity
   end
