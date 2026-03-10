@@ -2,7 +2,7 @@ class ExpensesController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    expenses = Expense.includes(:user, :category, :receipts).all
+    expenses = Expense.includes(:user, :category, :receipts)
 
     expenses = expenses.by_category(params[:category_id]) if params[:category_id].present?
     expenses = expenses.by_status(params[:status]) if params[:status].present?
