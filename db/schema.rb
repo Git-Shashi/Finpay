@@ -10,9 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_03_03_080535) do
+ActiveRecord::Schema[7.0].define(version: 2026_03_10_063117) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "activity_logs", force: :cascade do |t|
+    t.bigint "expense_id", null: false
+    t.bigint "user_id"
+    t.string "from_state"
+    t.string "to_state"
+    t.text "reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expense_id"], name: "index_activity_logs_on_expense_id"
+    t.index ["user_id"], name: "index_activity_logs_on_user_id"
+  end
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
@@ -47,6 +59,10 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_03_080535) do
     t.datetime "resolved_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "aasm_state", default: "pending", null: false
+    t.bigint "approved_by_id"
+    t.index ["aasm_state"], name: "index_expenses_on_aasm_state"
+    t.index ["approved_by_id"], name: "index_expenses_on_approved_by_id"
     t.index ["category_id"], name: "index_expenses_on_category_id"
     t.index ["user_id"], name: "index_expenses_on_user_id"
   end
@@ -92,6 +108,8 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_03_080535) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "activity_logs", "expenses"
+  add_foreign_key "activity_logs", "users"
   add_foreign_key "expenses", "categories"
   add_foreign_key "expenses", "users"
   add_foreign_key "receipts", "expenses"
