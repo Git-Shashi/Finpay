@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    aasm (5.5.2)
+      concurrent-ruby (~> 1.0)
     actioncable (7.0.10)
       actionpack (= 7.0.10)
       activesupport (= 7.0.10)
@@ -341,6 +343,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  aasm
   alba
   bootsnap
   bullet
@@ -362,6 +365,7 @@ DEPENDENCIES
   tzinfo-data
 
 CHECKSUMS
+  aasm (5.5.2) sha256=a3b874b33d9cbb3be4a2c77185c340a07fb46d7cd31911cbc49337e31d12612f
   actioncable (7.0.10) sha256=7aa02ea26d6cc21c33e604bb28a0759c5212653311bc42105f96f709e507afab
   actionmailbox (7.0.10) sha256=1236f472d86db056f97b3602391becab69c84d9f79d963b9c9b50056e213c1e6
   actionmailer (7.0.10) sha256=53bc7aac1659ef97a216c43002ea8286931d7b97f252b27152ac15de1b2585ef
