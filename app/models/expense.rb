@@ -1,13 +1,50 @@
+require 'aasm'
+
 class Expense < ApplicationRecord
   belongs_to :user
   belongs_to :category
   has_many :receipts, dependent: :destroy
-
-  enum :status, { pending: 0, approved: 1, rejected: 2 }
+  has_many :activity_logs, dependent: :destroy
+  belongs_to :approved_by, class_name: 'User', optional: true
 
   validates :amount, :expense_date, presence: true
   validates :amount, numericality: { greater_than: 0 }
   scope :by_category, ->(category_id) { where(category_id: category_id) }
-  scope :by_status, ->(status) { where(status: status) }
+  scope :by_state, ->(state) { where(aasm_state: state) }
   scope :by_date_range, ->(start_date, end_date) { where(expense_date: start_date..end_date) }
+
+  include AASM
+
+  aasm column: :aasm_state do
+    state :pending, initial: true
+    state :approved
+    state :rejected
+    state :reimbursed
+    state :archived
+
+    event :approve do
+      transitions from: :pending, to: :approved
+    end
+
+    event :reject do
+      transitions from: :pending, to: :rejected
+    end
+
+    event :reimburse do
+      transitions from: :approved, to: :reimbursed
+    end
+
+    event :archive do
+      transitions from: [:pending, :approved, :rejected, :reimbursed], to: :archived
+    end
+  end
+
+  after_transition any => any do |expense, transition|
+    ActivityLog.create!(
+      expense: expense,
+      user: expense.approved_by,
+      from_state: transition.from,
+      to_state: transition.to
+    )
+  end
 end

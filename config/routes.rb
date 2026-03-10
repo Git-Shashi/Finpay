@@ -9,6 +9,13 @@ Rails.application.routes.draw do
   resources :departments
   resources :categories
   resources :users
-  resources :expenses
+  resources :expenses do 
+    member do
+      post :approve
+      post :reject
+      post :reimburse
+      post :archive
+    end
+  end
   resources :receipts, only: [:index, :create, :destroy]
 end

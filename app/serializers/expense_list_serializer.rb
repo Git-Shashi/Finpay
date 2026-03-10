@@ -1,7 +1,7 @@
 class ExpenseListSerializer
   include Alba::Resource
 
-  attributes :id, :amount, :description, :expense_date, :status
+  attributes :id, :amount, :description, :expense_date, :aasm_state
 
   one :category do
     attributes :id, :name
