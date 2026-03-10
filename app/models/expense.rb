@@ -39,12 +39,12 @@ class Expense < ApplicationRecord
     end
   end
 
-  after_transition any => any do |expense, transition|
+  def record_transition(from_state, to_state)
     ActivityLog.create!(
-      expense: expense,
-      user: expense.approved_by,
-      from_state: transition.from,
-      to_state: transition.to
+      expense: self,
+      user: approved_by,
+      from_state: from_state,
+      to_state: to_state
     )
   end
 end
