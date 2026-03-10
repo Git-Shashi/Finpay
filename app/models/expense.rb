@@ -10,5 +10,4 @@ class Expense < ApplicationRecord
   scope :by_category, ->(category_id) { where(category_id: category_id) }
   scope :by_status, ->(status) { where(status: status) }
   scope :by_date_range, ->(start_date, end_date) { where(expense_date: start_date..end_date) }
-
 end

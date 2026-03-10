@@ -13,8 +13,6 @@ class ExpenseListSerializer
 
   many :receipts do
     attribute :id
-    attribute :url do |receipt|
-      receipt.file_url
-    end
+    attribute :url, &:file_url
   end
 end
