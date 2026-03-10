@@ -2,21 +2,14 @@ class ExpensesController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    expenses = Expense.includes(:user, :category, :receipts)
+  expenses = filtered_expenses
+  expenses = expenses.page(params[:page]).per(params[:per_page] || 10)
 
-    expenses = expenses.by_category(params[:category_id]) if params[:category_id].present?
-    expenses = expenses.by_status(params[:status]) if params[:status].present?
-
-    if params[:start_date].present? && params[:end_date].present?
-      expenses = expenses.by_date_range(params[:start_date], params[:end_date])
-    end
-    expenses = expenses.page(params[:page]).per(params[:per_page] || 10)
-
-    render json: {
-      expenses: ExpenseListSerializer.new(expenses).serialize,
-      pagination: pagination_meta(expenses)
-    }, status: :ok
-  end
+  render json: {
+    expenses: ExpenseListSerializer.new(expenses).serialize,
+    pagination: pagination_meta(expenses)
+  }, status: :ok
+end
 
   def show
     if expense
@@ -54,6 +47,19 @@ class ExpensesController < ApplicationController
   end
 
   private
+
+  def filtered_expenses
+  expenses = Expense.includes(:user, :category, :receipts)
+
+  expenses = expenses.by_category(params[:category_id]) if params[:category_id].present?
+  expenses = expenses.by_status(params[:status]) if params[:status].present?
+
+  if params[:start_date].present? && params[:end_date].present?
+    expenses = expenses.by_date_range(params[:start_date], params[:end_date])
+  end
+
+  expenses
+end
 
   def expense
   @expense ||= Expense.find(params[:id])
