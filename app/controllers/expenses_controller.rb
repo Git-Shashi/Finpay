@@ -42,7 +42,7 @@ class ExpensesController < ApplicationController
     if service.approve!
       render json: ExpenseSerializer.new(expense).as_json, status: :ok
     else
-      render json: { error: I18n.t('expenses.errors.not_authorized') }, status: :forbidden
+      render json: { error: I18n.t('expenses.errors.not_authorized') }, status: :unprocessable_entity
     end
   end
 
@@ -51,7 +51,7 @@ class ExpensesController < ApplicationController
     if service.reject!(params[:reason])
       render json: ExpenseSerializer.new(expense).as_json, status: :ok
     else
-      render json: { error: I18n.t('expenses.errors.not_authorized') }, status: :forbidden
+      render json: { error: I18n.t('expenses.errors.not_authorized') }, status: :unprocessable_entity
     end
   end
 
@@ -60,7 +60,7 @@ class ExpensesController < ApplicationController
     if service.reimburse!
       render json: ExpenseSerializer.new(expense).as_json, status: :ok
     else
-      render json: { error: I18n.t('expenses.errors.not_authorized') }, status: :forbidden
+      render json: { error: I18n.t('expenses.errors.not_authorized') }, status: :unprocessable_entity
     end
   end
 
