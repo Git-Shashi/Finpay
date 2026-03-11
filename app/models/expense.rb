@@ -10,12 +10,12 @@ class Expense < ApplicationRecord
   validates :amount, :expense_date, presence: true
   validates :amount, numericality: { greater_than: 0 }
   scope :by_category, ->(category_id) { where(category_id: category_id) }
-  scope :by_state, ->(state) { where(aasm_state: state) }
+  scope :by_state, ->(state) { where(status: state) }
   scope :by_date_range, ->(start_date, end_date) { where(expense_date: start_date..end_date) }
 
   include AASM
 
-  aasm column: :aasm_state do
+  aasm column: :status do
     state :pending, initial: true
     state :approved
     state :rejected

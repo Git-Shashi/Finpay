@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_03_10_063117) do
+ActiveRecord::Schema[7.0].define(version: 2026_03_11_072249) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -55,13 +55,11 @@ ActiveRecord::Schema[7.0].define(version: 2026_03_10_063117) do
     t.decimal "amount"
     t.text "description"
     t.date "expense_date"
-    t.integer "status"
+    t.string "status"
     t.datetime "resolved_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "aasm_state", default: "pending", null: false
     t.bigint "approved_by_id"
-    t.index ["aasm_state"], name: "index_expenses_on_aasm_state"
     t.index ["approved_by_id"], name: "index_expenses_on_approved_by_id"
     t.index ["category_id"], name: "index_expenses_on_category_id"
     t.index ["user_id"], name: "index_expenses_on_user_id"
