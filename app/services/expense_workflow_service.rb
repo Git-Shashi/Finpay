@@ -5,48 +5,30 @@ class ExpenseWorkflowService
   end
 
   def approve!
-    return false unless can_approve?
-
-    from_state = @expense.aasm_state
-    @expense.approved_by = @user
-    @expense.approve!
-    @expense.record_transition(from_state, 'approved')
-    true
+    perform_transition('approved')
   end
 
   def reject!(reason = nil)
-    return false unless can_approve?
-
-    from_state = @expense.aasm_state
-    @expense.approved_by = @user
-    @expense.reject!
-    @expense.record_transition(from_state, 'rejected',reason)
-    true
+    perform_transition('rejected', reason)
   end
 
   def reimburse!
-    return false unless can_reimburse?
-
-    from_state = @expense.aasm_state
-    @expense.reimburse!
-    @expense.record_transition(from_state, 'reimbursed')
-    true
+    perform_transition('reimbursed')
   end
 
   def archive!
-    from_state = @expense.aasm_state
-    @expense.archive!
-    @expense.record_transition(from_state, 'archived')
-    true
+    perform_transition('archived')
   end
 
   private
 
-  def can_approve?
-    @user.admin?
-  end
-
-  def can_reimburse?
-    @user.admin?
+  def perform_transition(to_state, reason = nil)
+    from_state = @expense.status
+    @expense.approved_by = @user
+    @expense.send("#{to_state}!")
+    @expense.record_transition(from_state, to_state, reason)
+    true
+  rescue AASM::InvalidTransition
+    false
   end
 end
