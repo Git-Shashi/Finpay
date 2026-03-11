@@ -31,3 +31,8 @@
 
 en:
   hello: "Hello world"
+  expenses:
+    errors:
+      not_found: "Expense not found"
+      not_authorized: "Not authorized or invalid state"
+      invalid_state: "Invalid state"

@@ -15,7 +15,7 @@ class ExpensesController < ApplicationController
     if expense
       render json: ExpenseSerializer.new(expense).as_json
     else
-      render json: { error: 'Expense not found' }, status: :not_found
+      render json: { error: I18n.t('expenses.errors.not_found') }, status: :not_found
     end
   end
 
@@ -33,7 +33,7 @@ class ExpensesController < ApplicationController
       expense.update!(expense_params)
       render json: ExpenseSerializer.new(expense).as_json
     else
-      render json: { error: 'Expense not found' }, status: :not_found
+      render json: { error: I18n.t('expenses.errors.not_found') }, status: :not_found
     end
   end
 
@@ -42,7 +42,7 @@ class ExpensesController < ApplicationController
     if service.approve!
       render json: ExpenseSerializer.new(expense).as_json, status: :ok
     else
-      render json: { error: 'Not authorized or invalid state' }, status: :forbidden
+      render json: { error: I18n.t('expenses.errors.not_authorized') }, status: :forbidden
     end
   end
 
@@ -51,7 +51,7 @@ class ExpensesController < ApplicationController
     if service.reject!(params[:reason])
       render json: ExpenseSerializer.new(expense).as_json, status: :ok
     else
-      render json: { error: 'Not authorized or invalid state' }, status: :forbidden
+      render json: { error: I18n.t('expenses.errors.not_authorized') }, status: :forbidden
     end
   end
 
@@ -60,7 +60,7 @@ class ExpensesController < ApplicationController
     if service.reimburse!
       render json: ExpenseSerializer.new(expense).as_json, status: :ok
     else
-      render json: { error: 'Not authorized or invalid state' }, status: :forbidden
+      render json: { error: I18n.t('expenses.errors.not_authorized') }, status: :forbidden
     end
   end
 
@@ -69,7 +69,7 @@ class ExpensesController < ApplicationController
     if service.archive!
       render json: ExpenseSerializer.new(expense).as_json, status: :ok
     else
-      render json: { error: 'Invalid state' }, status: :unprocessable_entity
+      render json: { error: I18n.t('expenses.errors.invalid_state') }, status: :unprocessable_entity
     end
   end
 
@@ -78,7 +78,7 @@ class ExpensesController < ApplicationController
       expense.destroy
       head :no_content
     else
-      render json: { error: 'Expense not found' }, status: :not_found
+     render json: { error: I18n.t('expenses.errors.not_found') }, status: :not_found
     end
   end
 
