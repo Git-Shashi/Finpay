@@ -36,61 +36,60 @@ class ExpensesController < ApplicationController
       render json: { error: I18n.t('expenses.errors.not_found') }, status: :not_found
     end
   end
-def approve
-  authorize_user!
-  service = ExpenseWorkflowService.new(expense, current_user)
-  if service.approve!
-    render json: ExpenseSerializer.new(expense).as_json, status: :ok
-  else
-    render json: { error: I18n.t('expenses.errors.invalid_state') }, status: :unprocessable_entity
+
+  def approve
+    authorize_user!
+    service = ExpenseWorkflowService.new(expense, current_user)
+    if service.approve!
+      render json: ExpenseSerializer.new(expense).as_json, status: :ok
+    else
+      render json: { error: I18n.t('expenses.errors.invalid_state') }, status: :unprocessable_entity
+    end
   end
-end
 
-def reject
-  authorize_user!
-  service = ExpenseWorkflowService.new(expense, current_user)
-  if service.reject!(params[:reason])
-    render json: ExpenseSerializer.new(expense).as_json, status: :ok
-  else
-    render json: { error: I18n.t('expenses.errors.invalid_state') }, status: :unprocessable_entity
+  def reject
+    authorize_user!
+    service = ExpenseWorkflowService.new(expense, current_user)
+    if service.reject!(params[:reason])
+      render json: ExpenseSerializer.new(expense).as_json, status: :ok
+    else
+      render json: { error: I18n.t('expenses.errors.invalid_state') }, status: :unprocessable_entity
+    end
   end
-end
 
-def reimburse
-  authorize_user!
-  service = ExpenseWorkflowService.new(expense, current_user)
-  if service.reimburse!
-    render json: ExpenseSerializer.new(expense).as_json, status: :ok
-  else
-    render json: { error: I18n.t('expenses.errors.invalid_state') }, status: :unprocessable_entity
+  def reimburse
+    authorize_user!
+    service = ExpenseWorkflowService.new(expense, current_user)
+    if service.reimburse!
+      render json: ExpenseSerializer.new(expense).as_json, status: :ok
+    else
+      render json: { error: I18n.t('expenses.errors.invalid_state') }, status: :unprocessable_entity
+    end
   end
-end
 
-def archive
-  service = ExpenseWorkflowService.new(expense, current_user)
-  if service.archive!
-    render json: ExpenseSerializer.new(expense).as_json, status: :ok
-  else
-    render json: { error: I18n.t('expenses.errors.invalid_state') }, status: :unprocessable_entity
+  def archive
+    service = ExpenseWorkflowService.new(expense, current_user)
+    if service.archive!
+      render json: ExpenseSerializer.new(expense).as_json, status: :ok
+    else
+      render json: { error: I18n.t('expenses.errors.invalid_state') }, status: :unprocessable_entity
+    end
   end
-end
-
-
 
   def destroy
     if expense
       expense.destroy
       head :no_content
     else
-     render json: { error: I18n.t('expenses.errors.not_found') }, status: :not_found
+      render json: { error: I18n.t('expenses.errors.not_found') }, status: :not_found
     end
   end
 
   private
 
   def authorize_user!
-  render json: { error: I18n.t('expenses.errors.not_authorized') }, status: :unprocessable_entity unless current_user.admin?
-end
+    render json: { error: I18n.t('expenses.errors.not_authorized') }, status: :unprocessable_entity unless current_user.admin?
+  end
 
   def filtered_expenses
     expenses = Expense.includes(:user, :category, :receipts)
