@@ -14,13 +14,13 @@ class ExpenseWorkflowService
     true
   end
 
-  def reject!(_reason = nil)
+  def reject!(reason = nil)
     return false unless can_approve?
 
     from_state = @expense.aasm_state
     @expense.approved_by = @user
     @expense.reject!
-    @expense.record_transition(from_state, 'rejected')
+    @expense.record_transition(from_state, 'rejected',reason)
     true
   end
 

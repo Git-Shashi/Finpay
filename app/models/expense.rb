@@ -39,12 +39,13 @@ class Expense < ApplicationRecord
     end
   end
 
-  def record_transition(from_state, to_state)
+  def record_transition(from_state, to_state, reason = nil)
     ActivityLog.create!(
       expense: self,
       user: approved_by,
       from_state: from_state,
-      to_state: to_state
+      to_state: to_state,
+      reason: reason
     )
   end
 end
