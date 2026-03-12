@@ -36,6 +36,7 @@ class ExpenseWorkflowService
     
     @expense.approved_by = @user
     @expense.send("#{event}!")
+    @expense.save!
     @expense.record_transition(from_state, to_state, reason)
     true
   rescue AASM::InvalidTransition
