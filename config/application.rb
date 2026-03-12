@@ -34,5 +34,7 @@ module Finpay
     # --- Register custom middleware here ---
     config.middleware.use TenantSwitcher
     config.action_dispatch.tld_length = 0
+
+    config.active_job.queue_adapter = :sidekiq
   end
 end
