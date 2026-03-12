@@ -5,37 +5,29 @@ class ExpenseWorkflowService
   end
 
   def approve!
-    perform_transition('approved')
+    perform_transition('approve')
   end
 
   def reject!(reason = nil)
-    perform_transition('rejected', reason)
+    perform_transition('reject', reason)
   end
 
   def reimburse!
-    perform_transition('reimbursed')
+    perform_transition('reimburse')
   end
 
   def archive!
-    perform_transition('archived')
+    perform_transition('archive')
   end
 
   private
 
-  def perform_transition(to_state, reason = nil)
+  def perform_transition(event, reason = nil)
     from_state = @expense.status
-    event_map = {
-      'approved' => 'approve',
-      'rejected' => 'reject',
-      'reimbursed' => 'reimburse',
-      'archived' => 'archive'
-    }
-    event = event_map[to_state] || to_state
-
     @expense.approved_by = @user
     @expense.send("#{event}!")
     @expense.save!
-    @expense.record_transition(from_state, to_state, reason)
+    @expense.record_transition(from_state, @expense.status, reason)
     true
   rescue AASM::InvalidTransition
     false
