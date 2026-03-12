@@ -25,15 +25,13 @@ class ExpenseWorkflowService
   def perform_transition(to_state, reason = nil)
     from_state = @expense.status
     event_map = {
-    'approved' => 'approve',
-    'rejected' => 'reject',
-    'reimbursed' => 'reimburse',
-    'archived' => 'archive'
-  }
-  event = event_map[to_state] || to_state
+      'approved' => 'approve',
+      'rejected' => 'reject',
+      'reimbursed' => 'reimburse',
+      'archived' => 'archive'
+    }
+    event = event_map[to_state] || to_state
 
-
-    
     @expense.approved_by = @user
     @expense.send("#{event}!")
     @expense.save!

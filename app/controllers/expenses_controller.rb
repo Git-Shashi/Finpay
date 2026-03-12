@@ -39,6 +39,7 @@ class ExpensesController < ApplicationController
 
   def approve
     return unless authorize_user!
+
     service = ExpenseWorkflowService.new(expense, current_user)
     if service.approve!
       render json: ExpenseSerializer.new(expense).as_json, status: :ok
@@ -49,6 +50,7 @@ class ExpensesController < ApplicationController
 
   def reject
     return unless authorize_user!
+
     service = ExpenseWorkflowService.new(expense, current_user)
     if service.reject!(params[:reason])
       render json: ExpenseSerializer.new(expense).as_json, status: :ok
@@ -59,6 +61,7 @@ class ExpensesController < ApplicationController
 
   def reimburse
     return unless authorize_user!
+
     service = ExpenseWorkflowService.new(expense, current_user)
     if service.reimburse!
       render json: ExpenseSerializer.new(expense).as_json, status: :ok
@@ -69,6 +72,7 @@ class ExpensesController < ApplicationController
 
   def archive
     return unless authorize_user!
+
     service = ExpenseWorkflowService.new(expense, current_user)
     if service.archive!
       render json: ExpenseSerializer.new(expense).as_json, status: :ok
@@ -89,12 +93,12 @@ class ExpensesController < ApplicationController
   private
 
   def authorize_user!
-  unless current_user.admin?
-    render json: { error: I18n.t('expenses.errors.not_authorized') }, status: :unprocessable_entity
-    return false
+    unless current_user.admin?
+      render json: { error: I18n.t('expenses.errors.not_authorized') }, status: :unprocessable_entity
+      return false
+    end
+    true
   end
-  true
-end
 
   def filtered_expenses
     expenses = Expense.includes(:user, :category, :receipts)
