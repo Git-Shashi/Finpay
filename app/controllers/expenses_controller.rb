@@ -91,6 +91,23 @@ class ExpensesController < ApplicationController
     end
   end
 
+  # Receipt actions (nested under expenses)
+  def receipts
+    render json: ReceiptSerializer.new(scoped_expense.receipts).serialize
+  end
+
+  def create_receipt
+    receipt = scoped_expense.receipts.create!(receipt_params)
+    ReceiptProcessorWorker.perform_async(receipt.id, Apartment::Tenant.current)
+    render json: ReceiptSerializer.new(receipt).serialize, status: :created
+  end
+
+  def destroy_receipt
+    receipt = scoped_expense.receipts.find(params[:receipt_id])
+    receipt.destroy
+    head :no_content
+  end
+
   private
 
   def authorize_user!
@@ -120,6 +137,14 @@ class ExpensesController < ApplicationController
 
   def expense_params
     params.require(:expense).permit(:category_id, :amount, :description, :expense_date)
+  end
+
+  def receipt_params
+    params.require(:receipt).permit(:file, :amount, :receipt_date, :notes)
+  end
+
+  def scoped_expense
+    @scoped_expense ||= current_user.expenses.find(params[:id])
   end
 
   def pagination_meta(expenses)
