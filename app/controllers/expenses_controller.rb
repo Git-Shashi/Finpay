@@ -22,7 +22,7 @@ class ExpensesController < ApplicationController
   def create
     expense = current_user.expenses.build(expense_params)
     if expense.save
-      AuditLogWorker.perform_async(expense.id, 'created',Apartment::Tenant.current) 
+      AuditLogWorker.perform_async(expense.id, 'created', Apartment::Tenant.current)
       render json: ExpenseSerializer.new(expense).as_json, status: :created
     else
       render json: { errors: expense.errors.full_messages }, status: :unprocessable_entity

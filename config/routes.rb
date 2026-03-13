@@ -21,8 +21,7 @@ Rails.application.routes.draw do
   end
   resources :receipts, only: [:index, :create, :destroy]
 
-  authenticate :user, lambda { |u| u.admin? } do
-    mount Sidekiq::Web => '/sidekiq' 
+  authenticate :user, ->(u) { u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
   end
-
 end

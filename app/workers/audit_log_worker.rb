@@ -1,5 +1,6 @@
 class AuditLogWorker
   include Sidekiq::Worker
+
   sidekiq_options retry: 5
 
   def perform(expense_id, action, tenant = nil)
