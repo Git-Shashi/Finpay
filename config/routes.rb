@@ -18,8 +18,9 @@ Rails.application.routes.draw do
       post :reimburse
       post :archive
     end
+
+    resources :receipts, only: [:index, :create, :destroy]
   end
-  resources :receipts, only: [:index, :create, :destroy]
 
   authenticate :user, ->(u) { u.admin? } do
     mount Sidekiq::Web => '/sidekiq'
