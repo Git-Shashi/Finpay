@@ -17,6 +17,7 @@ class ReceiptsController < ApplicationController
   def create
     expense = current_user.expenses.find(params[:expense_id])
     receipt = expense.receipts.create!(receipt_params)
+    RecieiptProcessorWorker.perform_async(receipt.id)
     render json: ReceiptSerializer.new(receipt).serialize, status: :created
   end
 

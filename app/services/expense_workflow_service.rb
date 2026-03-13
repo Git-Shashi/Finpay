@@ -28,6 +28,7 @@ class ExpenseWorkflowService
     @expense.send("#{event}!")
     @expense.save!
     @expense.record_transition(from_state, @expense.status, reason)
+    AuditLogWorker.perform_async(@expense.id, 'status_changed to ' + @expense.status,Apartment::Tenant.current)
     true
   rescue AASM::InvalidTransition
     false
