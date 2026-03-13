@@ -2,6 +2,7 @@ class TenantSwitcher
   PUBLIC_PATHS = %w[
     /companies
     /health
+    /sidekiq
   ].freeze
 
   def initialize(app)
