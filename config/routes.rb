@@ -1,3 +1,5 @@
+require "sidekiq/web"
+
 Rails.application.routes.draw do
   # Devise Token Auth (ONLY authentication system)
   mount_devise_token_auth_for 'User', at: 'auth'
@@ -18,4 +20,9 @@ Rails.application.routes.draw do
     end
   end
   resources :receipts, only: [:index, :create, :destroy]
+
+  authenticate :user, lambda { |u| u.admin? } do
+    mount Sidekiq::Web => '/sidekiq' 
+  end
+
 end
