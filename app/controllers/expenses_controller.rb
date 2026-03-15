@@ -98,7 +98,7 @@ class ExpensesController < ApplicationController
 
   def create_receipt
     receipt = scoped_expense.receipts.create!(receipt_params)
-    ReceiptProcessorWorker.perform_async(receipt.id, Apartment::Tenant.current)
+    ReceiptProcessorWorker.perform_async(scoped_expense.id, receipt.id, Apartment::Tenant.current)
     render json: ReceiptSerializer.new(receipt).serialize, status: :created
   end
 
