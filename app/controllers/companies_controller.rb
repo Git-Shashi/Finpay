@@ -1,52 +1,28 @@
 class CompaniesController < ApplicationController
-  # GET /companies
   def index
-    companies = Company.all
-    render json: CompanySerializer.new(companies).serialize, status: :ok
+    render_success CompanySerializer.new(Company.all).serialize
   end
 
-  # GET /companies/:id
   def show
-    if company
-      render json: CompanySerializer.new(company).serialize, status: :ok
-    else
-      render json: { error: 'Company not found' }, status: :not_found
-    end
+    render_success CompanySerializer.new(company).serialize
   end
 
-  # POST /companies
   def create
     company = Company.new(company_params)
-    if company.save
-      Tenants::ProvisioningService.new(company).call
-      render json: CompanySerializer.new(company).serialize, status: :created
-    else
-      render json: { errors: company.errors.full_messages }, status: :unprocessable_entity
-    end
+    company.save!
+    Tenants::ProvisioningService.call(company)
+    render_created CompanySerializer.new(company).serialize
   end
 
-  # PATCH/PUT /companies/:id
   def update
-    if company
-      if company.update(company_params)
-        render json: CompanySerializer.new(company).serialize, status: :ok
-      else
-        render json: { errors: company.errors.full_messages }, status: :unprocessable_entity
-      end
-    else
-      render json: { error: 'Company not found' }, status: :not_found
-    end
+    company.update!(company_params)
+    render_success CompanySerializer.new(company).serialize
   end
 
-  # DELETE /companies/:id
   def destroy
-    if company
-      Apartment::Tenant.drop(company.schema_name) if company.schema_name.present?
-      company.destroy
-      render json: { message: 'Company deleted successfully' }, status: :ok
-    else
-      render json: { error: 'Company not found' }, status: :not_found
-    end
+    Apartment::Tenant.drop(company.schema_name) if company.schema_name.present?
+    company.destroy
+    render_message I18n.t("companies.deleted")
   end
 
   private

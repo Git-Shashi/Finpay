@@ -1,38 +1,25 @@
 class UsersController < ApplicationController
   def index
-    users = User.all
-    render json: UserSerializer.new(users).serialize
+    render_success UserSerializer.new(User.all).serialize
   end
 
   def show
-    if user
-      render json: UserSerializer.new(user).serialize
-    else
-      render json: { error: 'User not found' }, status: :not_found
-    end
+    render_success UserSerializer.new(user).serialize
   end
 
   def create
     user = User.create!(user_params)
-    render json: UserSerializer.new(user).serialize, status: :created
+    render_created UserSerializer.new(user).serialize
   end
 
   def update
-    if user
-      user.update!(user_params)
-      render json: UserSerializer.new(user).serialize
-    else
-      render json: { error: 'User not found' }, status: :not_found
-    end
+    user.update!(user_params)
+    render_success UserSerializer.new(user).serialize
   end
 
   def destroy
-    if user
-      user.destroy
-      head :no_content
-    else
-      render json: { error: 'User not found' }, status: :not_found
-    end
+    user.destroy
+    render_no_content
   end
 
   private

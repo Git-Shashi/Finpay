@@ -2,120 +2,96 @@ class ExpensesController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    expenses = filtered_expenses
-    expenses = expenses.page(params[:page]).per(params[:per_page] || 10)
+    expenses = filtered_expenses.page(params[:page]).per(params[:per_page] || 10)
 
     render json: {
-      expenses: ExpenseListSerializer.new(expenses).as_json,
+      expenses: ExpenseListSerializer.new(expenses).serialize,
       pagination: pagination_meta(expenses)
     }, status: :ok
   end
 
   def show
-    if expense
-      render json: ExpenseSerializer.new(expense).as_json
-    else
-      render json: { error: I18n.t('expenses.errors.not_found') }, status: :not_found
-    end
+    render_success ExpenseSerializer.new(expense).serialize
   end
 
   def create
     expense = current_user.expenses.build(expense_params)
-    if expense.save
-      AuditLogWorker.perform_async(expense.id, 'created', Apartment::Tenant.current)
-      render json: ExpenseSerializer.new(expense).as_json, status: :created
-    else
-      render json: { errors: expense.errors.full_messages }, status: :unprocessable_entity
-    end
+    expense.save!
+    AuditLogWorker.perform_async(expense.id, 'created', Apartment::Tenant.current)
+    render_created ExpenseSerializer.new(expense).serialize
   end
 
   def update
-    if expense
-      expense.update!(expense_params)
-      render json: ExpenseSerializer.new(expense).as_json
-    else
-      render json: { error: I18n.t('expenses.errors.not_found') }, status: :not_found
-    end
+    expense.update!(expense_params)
+    render_success ExpenseSerializer.new(expense).serialize
   end
 
   def approve
-    return unless authorize_user!
-
+    authorize_user!
     service = ExpenseWorkflowService.new(expense, current_user)
     if service.approve!
-      render json: ExpenseSerializer.new(expense).as_json, status: :ok
+      render_success ExpenseSerializer.new(expense).serialize
     else
-      render json: { error: I18n.t('expenses.errors.invalid_state') }, status: :unprocessable_entity
+      render_error I18n.t('expenses.errors.invalid_state')
     end
   end
 
   def reject
-    return unless authorize_user!
-
+    authorize_user!
     service = ExpenseWorkflowService.new(expense, current_user)
     if service.reject!(params[:reason])
-      render json: ExpenseSerializer.new(expense).as_json, status: :ok
+      render_success ExpenseSerializer.new(expense).serialize
     else
-      render json: { error: I18n.t('expenses.errors.invalid_state') }, status: :unprocessable_entity
+      render_error I18n.t('expenses.errors.invalid_state')
     end
   end
 
   def reimburse
-    return unless authorize_user!
-
+    authorize_user!
     service = ExpenseWorkflowService.new(expense, current_user)
     if service.reimburse!
-      render json: ExpenseSerializer.new(expense).as_json, status: :ok
+      render_success ExpenseSerializer.new(expense).serialize
     else
-      render json: { error: I18n.t('expenses.errors.invalid_state') }, status: :unprocessable_entity
+      render_error I18n.t('expenses.errors.invalid_state')
     end
   end
 
   def archive
-    return unless authorize_user!
-
+    authorize_user!
     service = ExpenseWorkflowService.new(expense, current_user)
     if service.archive!
-      render json: ExpenseSerializer.new(expense).as_json, status: :ok
+      render_success ExpenseSerializer.new(expense).serialize
     else
-      render json: { error: I18n.t('expenses.errors.invalid_state') }, status: :unprocessable_entity
+      render_error I18n.t('expenses.errors.invalid_state')
     end
   end
 
   def destroy
-    if expense
-      expense.destroy
-      head :no_content
-    else
-      render json: { error: I18n.t('expenses.errors.not_found') }, status: :not_found
-    end
+    expense.destroy
+    render_no_content
   end
 
   # Receipt actions (nested under expenses)
   def receipts
-    render json: ReceiptSerializer.new(scoped_expense.receipts).serialize
+    render_success ReceiptSerializer.new(scoped_expense.receipts).serialize
   end
 
   def create_receipt
     receipt = scoped_expense.receipts.create!(receipt_params)
     ReceiptProcessorWorker.perform_async(scoped_expense.id, receipt.id, Apartment::Tenant.current)
-    render json: ReceiptSerializer.new(receipt).serialize, status: :created
+    render_created ReceiptSerializer.new(receipt).serialize
   end
 
   def destroy_receipt
     receipt = scoped_expense.receipts.find(params[:receipt_id])
     receipt.destroy
-    head :no_content
+    render_no_content
   end
 
   private
 
   def authorize_user!
-    unless current_user.admin?
-      render json: { error: I18n.t('expenses.errors.not_authorized') }, status: :unprocessable_entity
-      return false
-    end
-    true
+    raise UnauthorizedError, I18n.t('expenses.errors.not_authorized') unless current_user.admin?
   end
 
   def filtered_expenses
