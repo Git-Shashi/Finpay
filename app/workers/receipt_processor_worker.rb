@@ -2,7 +2,7 @@ class ReceiptProcessorWorker
   include Sidekiq::Worker
 
   def perform(expense_id, receipt_id, tenant)
-    raise ArgumentError, "Tenant is required" if tenant.blank?
+    raise ArgumentError, I18n.t("receipt_processor_worker.errors.tenant_required") if tenant.blank?
 
     Apartment::Tenant.switch(tenant) do
       expense = Expense.find(expense_id)
@@ -10,7 +10,7 @@ class ReceiptProcessorWorker
       receipt.process!
     end
   rescue StandardError => e
-    Rails.logger.error("ReceiptProcessorWorker failed: #{e.message}")
+    Rails.logger.error((I18n.t("receipt_processor_worker.errors.failed", message: e.message)))
     raise
   end
 end
