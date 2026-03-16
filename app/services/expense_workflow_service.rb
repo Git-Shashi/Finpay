@@ -1,4 +1,4 @@
-class ExpenseWorkflowService
+class ExpenseWorkflowService < ApplicationService
   def initialize(expense, user)
     @expense = expense
     @user = user

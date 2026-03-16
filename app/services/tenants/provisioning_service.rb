@@ -7,7 +7,7 @@
 
 
 module Tenants
-  class ProvisioningService
+  class ProvisioningService < ApplicationService
     def initialize(company)
       @company = company
     end
