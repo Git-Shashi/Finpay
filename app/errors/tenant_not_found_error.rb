@@ -1,0 +1,1 @@
+class TenantNotFoundError < AppError; end
