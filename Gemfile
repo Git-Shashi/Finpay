@@ -74,4 +74,8 @@ group :development, :test do
 end
 gem 'ros-apartment', require: 'apartment'
 
+group :test do
+  gem 'simplecov', require: false
+end
+
 
