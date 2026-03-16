@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
+  include ErrorHandler
+  include ApiResponder
 
   before_action :configure_permitted_parameters, if: :devise_token_auth_controller?
 
