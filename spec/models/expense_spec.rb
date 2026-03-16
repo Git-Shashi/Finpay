@@ -31,6 +31,7 @@ RSpec.describe Expense, type: :model do
     it 'has many receipts' do
       expense = create(:expense)
       receipt = create(:receipt, expense: expense)
+      expect(receipt.expense).to eq(expense)
       expect(expense.receipts).to include(receipt)
     end
   end
