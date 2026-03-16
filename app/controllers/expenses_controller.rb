@@ -5,7 +5,7 @@ class ExpensesController < ApplicationController
     expenses = filtered_expenses.page(params[:page]).per(params[:per_page] || 10)
 
     render json: {
-      expenses: ExpenseListSerializer.new(expenses).serialize,
+      expenses: ExpenseListSerializer.new(expenses).as_json,
       pagination: pagination_meta(expenses)
     }, status: :ok
   end
