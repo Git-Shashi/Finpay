@@ -26,6 +26,8 @@ module Finpay
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
    config.autoload_paths << Rails.root.join('app/middleware')
+   config.autoload_paths << Rails.root.join('app/concerns')
+   config.autoload_paths << Rails.root.join('app/errors')
 
     # Enable cookies and session middleware for Devise Token Auth
     config.middleware.use ActionDispatch::Cookies
