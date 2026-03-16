@@ -3,13 +3,10 @@ class AuditLogWorker
 
   sidekiq_options retry: 5
 
-  def perform(expense_id, action, tenant = nil)
-    if tenant.present?
-      Apartment::Tenant.switch(tenant) do
-        expense = Expense.find(expense_id)
-        ActivityLog.create!(expense: expense, action: action)
-      end
-    else
+  def perform(expense_id, action, tenant)
+    raise ArgumentError, "Tenant is required" if tenant.blank?
+
+    Apartment::Tenant.switch(tenant) do
       expense = Expense.find(expense_id)
       ActivityLog.create!(expense: expense, action: action)
     end
