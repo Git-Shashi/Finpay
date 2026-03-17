@@ -10,8 +10,6 @@ RSpec.describe ExpenseWorkflowService, type: :service do
     allow(Apartment::Tenant).to receive(:current).and_return('company_beta')
   end
 
-  
-
   describe '#approve!' do
     context 'when expense is pending' do
       it 'returns true' do

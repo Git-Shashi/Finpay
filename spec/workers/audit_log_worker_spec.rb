@@ -11,9 +11,9 @@ RSpec.describe AuditLogWorker, type: :worker do
 
   describe '#perform' do
     it 'creates an activity log for the expense' do
-      expect {
+      expect do
         described_class.new.perform(expense.id, 'created', tenant)
-      }.to change(ActivityLog, :count).by(1)
+      end.to change(ActivityLog, :count).by(1)
     end
 
     it 'stores the correct action in the log' do
@@ -27,29 +27,29 @@ RSpec.describe AuditLogWorker, type: :worker do
     end
 
     it 'raises TenantNotFoundError when tenant is blank' do
-      expect {
+      expect do
         described_class.new.perform(expense.id, 'created', nil)
-      }.to raise_error(TenantNotFoundError)
+      end.to raise_error(TenantNotFoundError)
     end
 
     it 'raises TenantNotFoundError when tenant is empty string' do
-      expect {
+      expect do
         described_class.new.perform(expense.id, 'created', '')
-      }.to raise_error(TenantNotFoundError)
+      end.to raise_error(TenantNotFoundError)
     end
 
     it 'raises ActiveRecord::RecordNotFound for unknown expense_id' do
-      expect {
+      expect do
         described_class.new.perform(0, 'created', tenant)
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      end.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'logs the error message on failure' do
       allow(Expense).to receive(:find).and_raise(StandardError, 'db connection lost')
       expect(Rails.logger).to receive(:error).with(a_string_including('AuditLogWorker'))
-      expect {
+      expect do
         described_class.new.perform(expense.id, 'created', tenant)
-      }.to raise_error(StandardError, 'db connection lost')
+      end.to raise_error(StandardError, 'db connection lost')
     end
   end
 
@@ -63,9 +63,9 @@ RSpec.describe AuditLogWorker, type: :worker do
     it 'enqueues the job' do
       Sidekiq::Testing.fake! do
         described_class.jobs.clear
-        expect {
+        expect do
           described_class.perform_async(expense.id, 'created', tenant)
-        }.to change(described_class.jobs, :size).by(1)
+        end.to change(described_class.jobs, :size).by(1)
       end
     end
 

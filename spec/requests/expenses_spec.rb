@@ -64,7 +64,7 @@ RSpec.describe ExpensesController, type: :request do
 
     it 'filters by date range' do
       expense
-      get '/expenses', params: { start_date: 30.days.ago.to_date, end_date: Date.today }, headers: auth_headers
+      get '/expenses', params: { start_date: 30.days.ago.to_date, end_date: Time.zone.today }, headers: auth_headers
       expect(response).to have_http_status(:ok)
     end
 
@@ -263,15 +263,15 @@ RSpec.describe ExpensesController, type: :request do
 
     it 'attaches a receipt to the expense' do
       post "/expenses/#{expense.id}/receipts",
-        params: { receipt: { file: file, amount: 50.0, receipt_date: Date.today, notes: 'cab' } },
-        headers: auth_headers
+           params: { receipt: { file: file, amount: 50.0, receipt_date: Time.zone.today, notes: 'cab' } },
+           headers: auth_headers
       expect(response).to have_http_status(:created)
     end
 
     it 'enqueues ReceiptProcessorWorker' do
       post "/expenses/#{expense.id}/receipts",
-        params: { receipt: { file: file, amount: 50.0, receipt_date: Date.today, notes: 'cab' } },
-        headers: auth_headers
+           params: { receipt: { file: file, amount: 50.0, receipt_date: Time.zone.today, notes: 'cab' } },
+           headers: auth_headers
       expect(ReceiptProcessorWorker).to have_received(:perform_async)
     end
   end

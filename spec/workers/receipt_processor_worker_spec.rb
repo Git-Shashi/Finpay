@@ -17,41 +17,41 @@ RSpec.describe ReceiptProcessorWorker, type: :worker do
     end
 
     it 'sets processed_at on the receipt' do
-      expect {
+      expect do
         described_class.new.perform(expense.id, receipt.id, tenant)
-      }.to change { receipt.reload.processed_at }.from(nil)
+      end.to change { receipt.reload.processed_at }.from(nil)
     end
 
     it 'raises TenantNotFoundError when tenant is blank' do
-      expect {
+      expect do
         described_class.new.perform(expense.id, receipt.id, nil)
-      }.to raise_error(TenantNotFoundError)
+      end.to raise_error(TenantNotFoundError)
     end
 
     it 'raises TenantNotFoundError when tenant is empty string' do
-      expect {
+      expect do
         described_class.new.perform(expense.id, receipt.id, '')
-      }.to raise_error(TenantNotFoundError)
+      end.to raise_error(TenantNotFoundError)
     end
 
     it 'raises ActiveRecord::RecordNotFound for unknown expense_id' do
-      expect {
+      expect do
         described_class.new.perform(0, receipt.id, tenant)
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      end.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'raises ActiveRecord::RecordNotFound for unknown receipt_id' do
-      expect {
+      expect do
         described_class.new.perform(expense.id, 0, tenant)
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      end.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'logs the error message on failure' do
       allow(Expense).to receive(:find).and_raise(StandardError, 'disk full')
       expect(Rails.logger).to receive(:error).with(a_string_including('ReceiptProcessorWorker'))
-      expect {
+      expect do
         described_class.new.perform(expense.id, receipt.id, tenant)
-      }.to raise_error(StandardError, 'disk full')
+      end.to raise_error(StandardError, 'disk full')
     end
   end
 
@@ -59,9 +59,9 @@ RSpec.describe ReceiptProcessorWorker, type: :worker do
     it 'enqueues the job' do
       Sidekiq::Testing.fake! do
         described_class.jobs.clear
-        expect {
+        expect do
           described_class.perform_async(expense.id, receipt.id, tenant)
-        }.to change(described_class.jobs, :size).by(1)
+        end.to change(described_class.jobs, :size).by(1)
       end
     end
 

@@ -11,8 +11,6 @@ RSpec.describe Tenants::ProvisioningService, type: :service do
     allow(service).to receive(:load)
   end
 
-  
-
   describe '#call' do
     it 'creates a new apartment tenant for the company' do
       service.call

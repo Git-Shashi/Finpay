@@ -110,9 +110,9 @@ RSpec.describe Expense, type: :model do
   describe '#record_transition' do
     it 'creates an activity log entry' do
       expense = create(:expense)
-      expect {
+      expect do
         expense.record_transition('pending', 'approved')
-      }.to change(ActivityLog, :count).by(1)
+      end.to change(ActivityLog, :count).by(1)
     end
 
     it 'stores from_state, to_state and reason in the log' do
