@@ -37,6 +37,8 @@ module Finpay
     config.middleware.use TenantSwitcher
     config.action_dispatch.tld_length = 0
 
+    config.middleware.use Rack::Attack
+
     config.active_job.queue_adapter = :sidekiq
   end
 end

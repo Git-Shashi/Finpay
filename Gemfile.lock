@@ -220,6 +220,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.22)
+    rack-attack (6.8.0)
+      rack (>= 1.0, < 4)
     rack-protection (3.2.0)
       base64 (>= 0.1.0)
       rack (~> 2.2, >= 2.2.4)
@@ -374,6 +376,7 @@ DEPENDENCIES
   omniauth
   pg (~> 1.1)
   puma (~> 5.0)
+  rack-attack
   rails (~> 7.0.8)
   ros-apartment
   rspec-rails
@@ -477,6 +480,7 @@ CHECKSUMS
   puma (5.6.9) sha256=20701b2451080ec8d6d78d2e4b5a2913e6d0b865a51d704a4d60db8fd39a4228
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
   rack (2.2.22) sha256=c5cf0b7f872559966d974abe3101a57d51caf12504ee76290b98720004f64542
+  rack-attack (6.8.0) sha256=f2499fdebf85bcc05573a22dff57d24305ac14ec2e4156cd3c28d47cafeeecf2
   rack-protection (3.2.0) sha256=3c74ba7fc59066453d61af9bcba5b6fe7a9b3dab6f445418d3b391d5ea8efbff
   rack-test (2.2.0) sha256=005a36692c306ac0b4a9350355ee080fd09ddef1148a5f8b2ac636c720f5c463
   rails (7.0.10) sha256=866eb2c53d3184543fdb770d7ea308e4ee518063226a9e176229f3c7a9537c25

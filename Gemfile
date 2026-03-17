@@ -5,6 +5,8 @@ ruby "3.2.2"
 
 gem 'alba'
 
+gem 'rack-attack'
+
 gem 'kaminari'
 
 gem 'aasm'
