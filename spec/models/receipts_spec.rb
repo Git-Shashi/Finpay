@@ -49,5 +49,27 @@ RSpec.describe Receipt, type: :model do
       receipt = create(:receipt)
       expect(receipt.process!).to be true
     end
+
+    context 'when update raises a StandardError' do
+      it 'returns false' do
+        receipt = create(:receipt)
+        allow(receipt).to receive(:update).and_raise(StandardError, 'disk full')
+        expect(receipt.process!).to be false
+      end
+
+      it 'logs the error' do
+        receipt = create(:receipt)
+        allow(receipt).to receive(:update).and_raise(StandardError, 'disk full')
+        expect(Rails.logger).to receive(:error).with(/Failed to process receipt #{receipt.id}: disk full/)
+        receipt.process!
+      end
+
+      it 'does not set processed_at' do
+        receipt = create(:receipt)
+        allow(receipt).to receive(:update).and_raise(StandardError, 'disk full')
+        receipt.process!
+        expect(receipt.reload.processed_at).to be_nil
+      end
+    end
   end
 end
