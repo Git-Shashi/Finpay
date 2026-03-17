@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe UsersController, type: :request do
+RSpec.describe Api::V1::UsersController, type: :request do
   let!(:company) { Company.find_by(subdomain: 'beta') || create(:company) }
   let(:headers) { { 'X-Company-Id' => 'beta' } }
 
@@ -15,21 +15,21 @@ RSpec.describe UsersController, type: :request do
   describe 'GET /users' do
     it 'returns all users' do
       user
-      get '/users', headers: headers
+      get '/api/v1/users', headers: headers
       expect(response).to have_http_status(:ok)
     end
   end
 
   describe 'GET /users/:id' do
     it 'returns the user' do
-      get "/users/#{user.id}", headers: headers
+      get "/api/v1/users/#{user.id}", headers: headers
       expect(response).to have_http_status(:ok)
     end
   end
 
   describe 'POST /users' do
     it 'creates a new user' do
-      post '/users',
+      post '/api/v1/users',
            params: {
              user: {
                name: 'New User',
@@ -47,7 +47,7 @@ RSpec.describe UsersController, type: :request do
 
   describe 'PATCH /users/:id' do
     it 'updates the user' do
-      patch "/users/#{user.id}",
+      patch "/api/v1/users/#{user.id}",
             params: { user: { name: 'Updated Name' } },
             headers: headers
       expect(response).to have_http_status(:ok)
@@ -56,7 +56,7 @@ RSpec.describe UsersController, type: :request do
 
   describe 'DELETE /users/:id' do
     it 'deletes the user' do
-      delete "/users/#{user.id}", headers: headers
+      delete "/api/v1/users/#{user.id}", headers: headers
       expect(response).to have_http_status(:no_content)
     end
   end

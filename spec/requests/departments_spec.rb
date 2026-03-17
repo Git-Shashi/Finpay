@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe DepartmentsController, type: :request do
+RSpec.describe Api::V1::DepartmentsController, type: :request do
   let!(:company) { Company.find_by(subdomain: 'beta') || create(:company) }
   let(:headers) { { 'X-Company-Id' => 'beta' } }
 
@@ -13,21 +13,21 @@ RSpec.describe DepartmentsController, type: :request do
   describe 'GET /departments' do
     it 'returns all departments' do
       department
-      get '/departments', headers: headers
+      get '/api/v1/departments', headers: headers
       expect(response).to have_http_status(:ok)
     end
   end
 
   describe 'GET /departments/:id' do
     it 'returns the department' do
-      get "/departments/#{department.id}", headers: headers
+      get "/api/v1/departments/#{department.id}", headers: headers
       expect(response).to have_http_status(:ok)
     end
   end
 
   describe 'POST /departments' do
     it 'creates a new department' do
-      post '/departments',
+      post '/api/v1/departments',
            params: { department: { name: 'Engineering' } },
            headers: headers
       expect(response).to have_http_status(:created)
@@ -36,7 +36,7 @@ RSpec.describe DepartmentsController, type: :request do
 
   describe 'PATCH /departments/:id' do
     it 'updates the department' do
-      patch "/departments/#{department.id}",
+      patch "/api/v1/departments/#{department.id}",
             params: { department: { name: 'Updated Dept' } },
             headers: headers
       expect(response).to have_http_status(:ok)
@@ -45,7 +45,7 @@ RSpec.describe DepartmentsController, type: :request do
 
   describe 'DELETE /departments/:id' do
     it 'deletes the department' do
-      delete "/departments/#{department.id}", headers: headers
+      delete "/api/v1/departments/#{department.id}", headers: headers
       expect(response).to have_http_status(:no_content)
     end
   end

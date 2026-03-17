@@ -1,10 +1,10 @@
 # spec/requests/companies_spec.rb
 require 'rails_helper'
 
-RSpec.describe CompaniesController, type: :request do
+RSpec.describe Api::V1::CompaniesController, type: :request do
   describe 'GET /companies' do
     it 'returns all companies' do
-      get '/companies'
+      get '/api/v1/companies'
       expect(response).to have_http_status(:ok)
     end
   end
@@ -13,12 +13,12 @@ RSpec.describe CompaniesController, type: :request do
     let(:company) { Company.first }
 
     it 'returns the company' do
-      get "/companies/#{company.id}"
+      get "/api/v1/companies/#{company.id}"
       expect(response).to have_http_status(:ok)
     end
 
     it 'returns not found for invalid id' do
-      get '/companies/99999'
+      get '/api/v1/companies/99999'
       expect(response).to have_http_status(:not_found)
     end
   end
@@ -30,18 +30,18 @@ RSpec.describe CompaniesController, type: :request do
 
     it 'creates a new company' do
       expect do
-        post '/companies', params: valid_params
+        post '/api/v1/companies', params: valid_params
       end.to change(Company, :count).by(1)
       expect(response).to have_http_status(:created)
     end
 
     it 'returns error with invalid params' do
-      post '/companies', params: { company: { name: nil, subdomain: nil } }
+      post '/api/v1/companies', params: { company: { name: nil, subdomain: nil } }
       expect(response).to have_http_status(:unprocessable_entity)
     end
 
     it 'returns error with duplicate subdomain' do
-      post '/companies', params: { company: { name: 'Beta Again', subdomain: 'beta' } }
+      post '/api/v1/companies', params: { company: { name: 'Beta Again', subdomain: 'beta' } }
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end
@@ -50,13 +50,13 @@ RSpec.describe CompaniesController, type: :request do
     let(:company) { Company.first }
 
     it 'updates the company' do
-      patch "/companies/#{company.id}", params: { company: { name: 'Updated Corp' } }
+      patch "/api/v1/companies/#{company.id}", params: { company: { name: 'Updated Corp' } }
       expect(response).to have_http_status(:ok)
       expect(response.parsed_body['name']).to eq('Updated Corp')
     end
 
     it 'returns not found for invalid id' do
-      patch '/companies/99999', params: { company: { name: 'Nope' } }
+      patch '/api/v1/companies/99999', params: { company: { name: 'Nope' } }
       expect(response).to have_http_status(:not_found)
     end
   end
@@ -74,13 +74,13 @@ RSpec.describe CompaniesController, type: :request do
 
     it 'deletes the company' do
       expect do
-        delete "/companies/#{company.id}"
+        delete "/api/v1/companies/#{company.id}"
       end.to change(Company, :count).by(-1)
       expect(response).to have_http_status(:ok)
     end
 
     it 'returns not found for invalid id' do
-      delete '/companies/99999'
+      delete '/api/v1/companies/99999'
       expect(response).to have_http_status(:not_found)
     end
   end
