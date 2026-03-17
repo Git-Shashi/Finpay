@@ -81,7 +81,7 @@ RSpec.describe Api::V1::ExpensesController, type: :request do
     end
 
     it 'returns 404 for unknown expense' do
-      get '/expenses/0', headers: auth_headers
+      get '/api/v1/expenses/0', headers: auth_headers
       expect(response).to have_http_status(:not_found)
     end
 
@@ -138,7 +138,7 @@ RSpec.describe Api::V1::ExpensesController, type: :request do
     end
 
     it 'returns 404 for unknown expense' do
-      patch '/expenses/0', params: valid_params, headers: auth_headers
+      patch '/api/v1/expenses/0', params: valid_params, headers: auth_headers
       expect(response).to have_http_status(:not_found)
     end
 
@@ -155,7 +155,7 @@ RSpec.describe Api::V1::ExpensesController, type: :request do
     end
 
     it 'returns 404 for unknown expense' do
-      delete '/expenses/0', headers: auth_headers
+      delete '/api/v1/expenses/0', headers: auth_headers
       expect(response).to have_http_status(:not_found)
     end
 
