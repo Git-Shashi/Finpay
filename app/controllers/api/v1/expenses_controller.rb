@@ -1,4 +1,6 @@
-class ExpensesController < ApplicationController
+module Api
+  module V1
+    class ExpensesController < Api::V1::BaseController
   before_action :authenticate_user!
 
   def index
@@ -131,5 +133,6 @@ class ExpensesController < ApplicationController
       total_pages: expenses.total_pages,
       total_count: expenses.total_count
     }
+    end
   end
 end

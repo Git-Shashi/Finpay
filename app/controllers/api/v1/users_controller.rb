@@ -1,4 +1,6 @@
-class UsersController < ApplicationController
+module Api
+  module V1
+    class UsersController < Api::V1::BaseController
   def index
     render_success UserSerializer.new(User.all).serialize
   end
@@ -37,5 +39,6 @@ class UsersController < ApplicationController
       :department_id,
       :role
     )
+    end
   end
 end

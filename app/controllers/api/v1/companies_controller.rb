@@ -1,4 +1,6 @@
-class CompaniesController < ApplicationController
+module Api
+  module V1
+    class CompaniesController < Api::V1::BaseController
   def index
     render_success CompanySerializer.new(Company.all).serialize
   end
@@ -33,5 +35,6 @@ class CompaniesController < ApplicationController
 
   def company_params
     params.require(:company).permit(:name, :subdomain)
+    end
   end
 end

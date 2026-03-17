@@ -1,4 +1,6 @@
-class CategoriesController < ApplicationController
+module Api
+  module V1
+    class CategoriesController < Api::V1::BaseController
   def index
     render_success CategorySerializer.new(Category.all).serialize
   end
@@ -30,5 +32,6 @@ class CategoriesController < ApplicationController
 
   def category_params
     params.require(:category).permit(:name)
+    end
   end
 end
