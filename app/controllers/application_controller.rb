@@ -3,6 +3,8 @@ class ApplicationController < ActionController::API
   include ErrorHandler
   include ApiResponder
 
+  before_action { set_user_by_token(:api_v1_user) }
+
   before_action :configure_permitted_parameters, if: :devise_token_auth_controller?
 
   protected
