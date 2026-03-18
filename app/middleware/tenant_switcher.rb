@@ -3,6 +3,7 @@ class TenantSwitcher
     /companies
     /health
     /sidekiq
+    /api-docs
   ].freeze
 
   def initialize(app)
@@ -38,11 +39,11 @@ class TenantSwitcher
     PUBLIC_PATHS.any? { |p| path.start_with?(p) }
   end
 
-  def tenant_not_found
+  def tenant_not_found(message = 'Tenant not found')
     [
       404,
       { 'Content-Type' => 'application/json' },
-      [{ error: 'Tenant not found' }.to_json]
+      [{ error: message }.to_json]
     ]
   end
 end
