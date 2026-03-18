@@ -5,6 +5,10 @@ module Api
 
       private
 
+      def authenticate_user!
+        render json: { error: 'Unauthorized' }, status: :unauthorized unless current_user
+      end
+
       def set_secure_headers
         response.set_header('X-Content-Type-Options', 'nosniff')
         response.set_header('X-Frame-Options', 'DENY')
