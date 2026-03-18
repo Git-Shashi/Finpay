@@ -37,7 +37,7 @@ RSpec.describe 'api/v1/expenses', type: :request do
     get 'List expenses' do
       tags 'Expenses'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       parameter name: :page,        in: :query, type: :integer, required: false, description: 'Page number'
       parameter name: :per_page,    in: :query, type: :integer, required: false, description: 'Items per page (default: 10)'
@@ -78,7 +78,7 @@ RSpec.describe 'api/v1/expenses', type: :request do
       tags 'Expenses'
       consumes 'application/json'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       parameter name: :expense, in: :body, schema: {
         type: :object,
@@ -123,7 +123,7 @@ RSpec.describe 'api/v1/expenses', type: :request do
     get 'Get an expense' do
       tags 'Expenses'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '200', 'expense found' do
         let(:id) { create(:expense).id }
@@ -140,7 +140,7 @@ RSpec.describe 'api/v1/expenses', type: :request do
       tags 'Expenses'
       consumes 'application/json'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       parameter name: :expense_params, in: :body, schema: {
         type: :object,
@@ -166,7 +166,7 @@ RSpec.describe 'api/v1/expenses', type: :request do
 
     delete 'Delete an expense' do
       tags 'Expenses'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '204', 'expense deleted' do
         let(:id) { create(:expense).id }
@@ -182,7 +182,7 @@ RSpec.describe 'api/v1/expenses', type: :request do
     post 'Approve an expense' do
       tags 'Expense Workflow'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
       description 'Admin only. Transitions expense from pending → approved.'
 
       response '200', 'expense approved' do
@@ -208,7 +208,7 @@ RSpec.describe 'api/v1/expenses', type: :request do
       tags 'Expense Workflow'
       consumes 'application/json'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
       description 'Admin only. Transitions expense from pending → rejected.'
 
       parameter name: :reject_params, in: :body, schema: {
@@ -236,7 +236,7 @@ RSpec.describe 'api/v1/expenses', type: :request do
     post 'Reimburse an expense' do
       tags 'Expense Workflow'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
       description 'Admin only. Transitions expense from approved → reimbursed.'
 
       response '200', 'expense reimbursed' do
@@ -256,7 +256,7 @@ RSpec.describe 'api/v1/expenses', type: :request do
     post 'Archive an expense' do
       tags 'Expense Workflow'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
       description 'Admin only. Archives a reimbursed expense.'
 
       response '200', 'expense archived' do
@@ -277,7 +277,7 @@ RSpec.describe 'api/v1/expenses', type: :request do
     get 'List receipts for an expense' do
       tags 'Receipts'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '200', 'receipts listed' do
         schema type: :object,
@@ -308,7 +308,7 @@ RSpec.describe 'api/v1/expenses', type: :request do
       tags 'Receipts'
       consumes 'multipart/form-data'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       parameter name: :receipt, in: :formData, schema: {
         type: :object,
@@ -334,7 +334,7 @@ RSpec.describe 'api/v1/expenses', type: :request do
 
     delete 'Delete a receipt' do
       tags 'Receipts'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '204', 'receipt deleted' do
         let(:expense) { create(:expense) }

@@ -5,7 +5,7 @@ RSpec.describe 'api/v1/categories', type: :request do
     get 'List all categories' do
       tags 'Categories'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '200', 'categories listed' do
         schema type: :object,
@@ -33,7 +33,7 @@ RSpec.describe 'api/v1/categories', type: :request do
       tags 'Categories'
       consumes 'application/json'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       parameter name: :category, in: :body, schema: {
         type: :object,
@@ -66,7 +66,7 @@ RSpec.describe 'api/v1/categories', type: :request do
     get 'Get a category' do
       tags 'Categories'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '200', 'category found' do
         schema type: :object,
@@ -97,7 +97,7 @@ RSpec.describe 'api/v1/categories', type: :request do
       tags 'Categories'
       consumes 'application/json'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       parameter name: :category_params, in: :body, schema: {
         type: :object,
@@ -121,7 +121,7 @@ RSpec.describe 'api/v1/categories', type: :request do
 
     delete 'Delete a category' do
       tags 'Categories'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '204', 'category deleted' do
         let(:id) { create(:category).id }

@@ -5,7 +5,7 @@ RSpec.describe 'api/v1/departments', type: :request do
     get 'List all departments' do
       tags 'Departments'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '200', 'departments listed' do
         schema type: :object,
@@ -31,7 +31,7 @@ RSpec.describe 'api/v1/departments', type: :request do
       tags 'Departments'
       consumes 'application/json'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       parameter name: :department, in: :body, schema: {
         type: :object,
@@ -64,7 +64,7 @@ RSpec.describe 'api/v1/departments', type: :request do
     get 'Get a department' do
       tags 'Departments'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '200', 'department found' do
         schema type: :object,
@@ -93,7 +93,7 @@ RSpec.describe 'api/v1/departments', type: :request do
       tags 'Departments'
       consumes 'application/json'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       parameter name: :department_params, in: :body, schema: {
         type: :object,
@@ -117,7 +117,7 @@ RSpec.describe 'api/v1/departments', type: :request do
 
     delete 'Delete a department' do
       tags 'Departments'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '204', 'department deleted' do
         let(:id) { create(:department).id }

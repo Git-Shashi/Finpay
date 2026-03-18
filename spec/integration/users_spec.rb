@@ -5,7 +5,7 @@ RSpec.describe 'api/v1/users', type: :request do
     get 'List all users' do
       tags 'Users'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '200', 'users listed' do
         schema type: :object,
@@ -33,7 +33,7 @@ RSpec.describe 'api/v1/users', type: :request do
       tags 'Users'
       consumes 'application/json'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       parameter name: :user, in: :body, schema: {
         type: :object,
@@ -83,7 +83,7 @@ RSpec.describe 'api/v1/users', type: :request do
     get 'Get a user' do
       tags 'Users'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '200', 'user found' do
         schema type: :object,
@@ -114,7 +114,7 @@ RSpec.describe 'api/v1/users', type: :request do
       tags 'Users'
       consumes 'application/json'
       produces 'application/json'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       parameter name: :user_params, in: :body, schema: {
         type: :object,
@@ -140,7 +140,7 @@ RSpec.describe 'api/v1/users', type: :request do
 
     delete 'Delete a user' do
       tags 'Users'
-      security [{ token_auth: [], client_auth: [], uid_auth: [] }]
+      security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '204', 'user deleted' do
         let(:id) { create(:user).id }
