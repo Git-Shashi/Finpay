@@ -31,11 +31,17 @@ RSpec.configure do |config|
             type: :apiKey,
             in: :header,
             name: 'uid'
+          },
+          company_id: {
+            type: :apiKey,
+            in: :header,
+            name: 'X-Company-Id',
+            description: 'Company subdomain for tenant resolution (e.g. beta)'
           }
         }
       },
       security: [
-        { token_auth: [], client_auth: [], uid_auth: [] }
+        { token_auth: [], client_auth: [], uid_auth: [], company_id: [] }
       ]
     }
   }

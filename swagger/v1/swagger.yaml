@@ -22,10 +22,16 @@ components:
       type: apiKey
       in: header
       name: uid
+    company_id:
+      type: apiKey
+      in: header
+      name: X-Company-Id
+      description: Company subdomain for tenant resolution (e.g. beta)
 security:
 - token_auth: []
   client_auth: []
   uid_auth: []
+  company_id: []
 paths:
   "/api/v1/categories":
     get:
@@ -36,6 +42,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '200':
           description: categories listed
@@ -70,6 +77,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       parameters: []
       responses:
         '201':
@@ -105,6 +113,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '200':
           description: category found
@@ -139,6 +148,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       parameters: []
       responses:
         '200':
@@ -165,6 +175,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '204':
           description: category deleted
@@ -177,6 +188,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '200':
           description: companies listed
@@ -208,6 +220,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       parameters: []
       responses:
         '201':
@@ -247,6 +260,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '200':
           description: company found
@@ -278,6 +292,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       parameters: []
       responses:
         '200':
@@ -305,6 +320,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '200':
           description: company deleted
@@ -319,6 +335,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '200':
           description: departments listed
@@ -347,6 +364,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       parameters: []
       responses:
         '201':
@@ -382,6 +400,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '200':
           description: department found
@@ -410,6 +429,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       parameters: []
       responses:
         '200':
@@ -436,6 +456,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '204':
           description: department deleted
@@ -448,6 +469,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       parameters:
       - name: page
         in: query
@@ -529,6 +551,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       parameters: []
       responses:
         '201':
@@ -577,6 +600,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '200':
           description: expense found
@@ -590,6 +614,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       parameters: []
       responses:
         '200':
@@ -622,6 +647,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '204':
           description: expense deleted
@@ -640,6 +666,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       description: Admin only. Transitions expense from pending → approved.
       responses:
         '200':
@@ -663,6 +690,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       description: Admin only. Transitions expense from pending → rejected.
       parameters: []
       responses:
@@ -694,6 +722,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       description: Admin only. Transitions expense from approved → reimbursed.
       responses:
         '200':
@@ -715,6 +744,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       description: Admin only. Archives a reimbursed expense.
       responses:
         '200':
@@ -736,6 +766,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '200':
           description: receipts listed
@@ -776,6 +807,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       parameters: []
       responses:
         '201':
@@ -824,6 +856,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '204':
           description: receipt deleted
@@ -838,6 +871,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '200':
           description: users listed
@@ -876,6 +910,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       parameters: []
       responses:
         '201':
@@ -933,6 +968,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '200':
           description: user found
@@ -967,6 +1003,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       parameters: []
       responses:
         '200':
@@ -1003,6 +1040,7 @@ paths:
       - token_auth: []
         client_auth: []
         uid_auth: []
+        company_id: []
       responses:
         '204':
           description: user deleted
