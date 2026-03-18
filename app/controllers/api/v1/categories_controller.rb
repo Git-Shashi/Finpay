@@ -34,4 +34,5 @@ module Api
     params.require(:category).permit(:name)
     end
   end
+  end
 end

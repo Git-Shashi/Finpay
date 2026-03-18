@@ -34,4 +34,5 @@ module Api
     params.require(:department).permit(:name)
     end
   end
+  end
 end

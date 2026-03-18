@@ -37,4 +37,5 @@ module Api
     params.require(:company).permit(:name, :subdomain)
     end
   end
+  end
 end
