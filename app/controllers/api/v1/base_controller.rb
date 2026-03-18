@@ -5,6 +5,10 @@ module Api
 
       private
 
+      def current_user
+        @resource
+      end
+
       def authenticate_user!
         render json: { error: 'Unauthorized' }, status: :unauthorized unless current_user
       end
