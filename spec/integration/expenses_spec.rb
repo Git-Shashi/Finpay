@@ -6,25 +6,25 @@ RSpec.describe 'api/v1/expenses', type: :request do
     {
       type: :object,
       properties: {
-        id:           { type: :integer },
-        amount:       { type: :number },
-        description:  { type: :string },
+        id: { type: :integer },
+        amount: { type: :number },
+        description: { type: :string },
         expense_date: { type: :string, format: 'date' },
-        status:       { type: :string, enum: %w[pending approved rejected reimbursed archived] },
-        resolved_at:  { type: :string, format: 'date-time', nullable: true },
+        status: { type: :string, enum: %w[pending approved rejected reimbursed archived] },
+        resolved_at: { type: :string, format: 'date-time', nullable: true },
         user: {
           type: :object,
           properties: {
-            id:    { type: :integer },
-            name:  { type: :string },
+            id: { type: :integer },
+            name: { type: :string },
             email: { type: :string },
-            role:  { type: :string }
+            role: { type: :string }
           }
         },
         category: {
           type: :object,
           properties: {
-            id:   { type: :integer },
+            id: { type: :integer },
             name: { type: :string }
           }
         }
@@ -58,10 +58,10 @@ RSpec.describe 'api/v1/expenses', type: :request do
                    type: :object,
                    properties: {
                      current_page: { type: :integer },
-                     next_page:    { type: :integer, nullable: true },
-                     prev_page:    { type: :integer, nullable: true },
-                     total_pages:  { type: :integer },
-                     total_count:  { type: :integer }
+                     next_page: { type: :integer, nullable: true },
+                     prev_page: { type: :integer, nullable: true },
+                     total_pages: { type: :integer },
+                     total_count: { type: :integer }
                    }
                  }
                }
@@ -86,10 +86,10 @@ RSpec.describe 'api/v1/expenses', type: :request do
           expense: {
             type: :object,
             properties: {
-              amount:       { type: :number,  example: 150.00 },
-              description:  { type: :string,  example: 'Flight to client meeting' },
-              expense_date: { type: :string,  format: 'date', example: '2026-03-17' },
-              category_id:  { type: :integer, example: 1 }
+              amount: { type: :number, example: 150.00 },
+              description: { type: :string, example: 'Flight to client meeting' },
+              expense_date: { type: :string, format: 'date', example: '2026-03-17' },
+              category_id: { type: :integer, example: 1 }
             },
             required: %w[amount description expense_date category_id]
           }
@@ -148,10 +148,10 @@ RSpec.describe 'api/v1/expenses', type: :request do
           expense: {
             type: :object,
             properties: {
-              amount:       { type: :number,  example: 200.00 },
-              description:  { type: :string,  example: 'Updated description' },
-              expense_date: { type: :string,  format: 'date' },
-              category_id:  { type: :integer }
+              amount: { type: :number, example: 200.00 },
+              description: { type: :string, example: 'Updated description' },
+              expense_date: { type: :string, format: 'date' },
+              category_id: { type: :integer }
             }
           }
         }
@@ -287,13 +287,13 @@ RSpec.describe 'api/v1/expenses', type: :request do
                    items: {
                      type: :object,
                      properties: {
-                       id:           { type: :integer },
-                       amount:       { type: :number },
+                       id: { type: :integer },
+                       amount: { type: :number },
                        receipt_date: { type: :string, format: 'date' },
-                       notes:        { type: :string, nullable: true },
-                       status:       { type: :string },
+                       notes: { type: :string, nullable: true },
+                       status: { type: :string },
                        processed_at: { type: :string, format: 'date-time', nullable: true },
-                       file_url:     { type: :string, nullable: true }
+                       file_url: { type: :string, nullable: true }
                      }
                    }
                  }
@@ -313,10 +313,10 @@ RSpec.describe 'api/v1/expenses', type: :request do
       parameter name: :receipt, in: :formData, schema: {
         type: :object,
         properties: {
-          'receipt[file]':         { type: :string, format: :binary, description: 'Receipt file (image or PDF)' },
-          'receipt[amount]':       { type: :number,  example: 150.00 },
-          'receipt[receipt_date]': { type: :string,  format: 'date', example: '2026-03-17' },
-          'receipt[notes]':        { type: :string,  example: 'Hotel receipt' }
+          'receipt[file]': { type: :string, format: :binary, description: 'Receipt file (image or PDF)' },
+          'receipt[amount]': { type: :number, example: 150.00 },
+          'receipt[receipt_date]': { type: :string, format: 'date', example: '2026-03-17' },
+          'receipt[notes]': { type: :string, example: 'Hotel receipt' }
         },
         required: ['receipt[file]', 'receipt[amount]', 'receipt[receipt_date]']
       }

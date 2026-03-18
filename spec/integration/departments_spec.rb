@@ -15,7 +15,7 @@ RSpec.describe 'api/v1/departments', type: :request do
                    items: {
                      type: :object,
                      properties: {
-                       id:   { type: :integer },
+                       id: { type: :integer },
                        name: { type: :string }
                      },
                      required: %w[id name]
@@ -72,7 +72,7 @@ RSpec.describe 'api/v1/departments', type: :request do
                  data: {
                    type: :object,
                    properties: {
-                     id:   { type: :integer },
+                     id: { type: :integer },
                      name: { type: :string }
                    },
                    required: %w[id name]

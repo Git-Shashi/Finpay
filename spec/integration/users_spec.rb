@@ -15,10 +15,10 @@ RSpec.describe 'api/v1/users', type: :request do
                    items: {
                      type: :object,
                      properties: {
-                       id:    { type: :integer },
-                       name:  { type: :string },
+                       id: { type: :integer },
+                       name: { type: :string },
                        email: { type: :string },
-                       role:  { type: :string, enum: %w[employee manager admin] }
+                       role: { type: :string, enum: %w[employee manager admin] }
                      },
                      required: %w[id name email role]
                    }
@@ -41,12 +41,12 @@ RSpec.describe 'api/v1/users', type: :request do
           user: {
             type: :object,
             properties: {
-              name:                  { type: :string,  example: 'Jane Doe' },
-              email:                 { type: :string,  example: 'jane@example.com' },
-              password:              { type: :string,  example: 'secret123' },
-              password_confirmation: { type: :string,  example: 'secret123' },
-              department_id:         { type: :integer, example: 1 },
-              role:                  { type: :string,  enum: %w[employee manager admin], example: 'employee' }
+              name: { type: :string, example: 'Jane Doe' },
+              email: { type: :string, example: 'jane@example.com' },
+              password: { type: :string, example: 'secret123' },
+              password_confirmation: { type: :string, example: 'secret123' },
+              department_id: { type: :integer, example: 1 },
+              role: { type: :string, enum: %w[employee manager admin], example: 'employee' }
             },
             required: %w[name email password password_confirmation]
           }
@@ -91,10 +91,10 @@ RSpec.describe 'api/v1/users', type: :request do
                  data: {
                    type: :object,
                    properties: {
-                     id:    { type: :integer },
-                     name:  { type: :string },
+                     id: { type: :integer },
+                     name: { type: :string },
                      email: { type: :string },
-                     role:  { type: :string }
+                     role: { type: :string }
                    },
                    required: %w[id name email role]
                  }
@@ -122,10 +122,10 @@ RSpec.describe 'api/v1/users', type: :request do
           user: {
             type: :object,
             properties: {
-              name:          { type: :string,  example: 'Updated Name' },
-              email:         { type: :string,  example: 'updated@example.com' },
+              name: { type: :string, example: 'Updated Name' },
+              email: { type: :string, example: 'updated@example.com' },
               department_id: { type: :integer, example: 1 },
-              role:          { type: :string,  enum: %w[employee manager admin] }
+              role: { type: :string, enum: %w[employee manager admin] }
             }
           }
         }

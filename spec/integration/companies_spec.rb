@@ -15,8 +15,8 @@ RSpec.describe 'api/v1/companies', type: :request do
                    items: {
                      type: :object,
                      properties: {
-                       id:        { type: :integer },
-                       name:      { type: :string },
+                       id: { type: :integer },
+                       name: { type: :string },
                        subdomain: { type: :string }
                      },
                      required: %w[id name subdomain]
@@ -40,7 +40,7 @@ RSpec.describe 'api/v1/companies', type: :request do
           company: {
             type: :object,
             properties: {
-              name:      { type: :string, example: 'Acme Corp' },
+              name: { type: :string, example: 'Acme Corp' },
               subdomain: { type: :string, example: 'acme' }
             },
             required: %w[name subdomain]
@@ -74,8 +74,8 @@ RSpec.describe 'api/v1/companies', type: :request do
                  data: {
                    type: :object,
                    properties: {
-                     id:        { type: :integer },
-                     name:      { type: :string },
+                     id: { type: :integer },
+                     name: { type: :string },
                      subdomain: { type: :string }
                    },
                    required: %w[id name subdomain]
@@ -104,7 +104,7 @@ RSpec.describe 'api/v1/companies', type: :request do
           company: {
             type: :object,
             properties: {
-              name:      { type: :string, example: 'Updated Corp' },
+              name: { type: :string, example: 'Updated Corp' },
               subdomain: { type: :string, example: 'updated' }
             }
           }

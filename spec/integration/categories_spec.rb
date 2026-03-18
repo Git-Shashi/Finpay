@@ -15,8 +15,8 @@ RSpec.describe 'api/v1/categories', type: :request do
                    items: {
                      type: :object,
                      properties: {
-                       id:         { type: :integer },
-                       name:       { type: :string },
+                       id: { type: :integer },
+                       name: { type: :string },
                        created_at: { type: :string, format: 'date-time' },
                        updated_at: { type: :string, format: 'date-time' }
                      },
@@ -74,8 +74,8 @@ RSpec.describe 'api/v1/categories', type: :request do
                  data: {
                    type: :object,
                    properties: {
-                     id:         { type: :integer },
-                     name:       { type: :string },
+                     id: { type: :integer },
+                     name: { type: :string },
                      created_at: { type: :string, format: 'date-time' },
                      updated_at: { type: :string, format: 'date-time' }
                    },
