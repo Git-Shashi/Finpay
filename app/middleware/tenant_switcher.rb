@@ -1,6 +1,6 @@
 class TenantSwitcher
   PUBLIC_PATHS = %w[
-    /companies
+    /api/v1/companies
     /health
     /sidekiq
     /api-docs
