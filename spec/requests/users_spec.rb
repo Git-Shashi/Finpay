@@ -36,8 +36,7 @@ RSpec.describe Api::V1::UsersController, type: :request do
                email: 'newuser@example.com',
                password: 'password',
                password_confirmation: 'password',
-               department_id: department.id,
-               role: 'employee'
+               department_id: department.id
              }
            },
            headers: headers

@@ -36,8 +36,7 @@ module Api
           :email,
           :password,
           :password_confirmation,
-          :department_id,
-          :role
+          :department_id
         )
       end
     end

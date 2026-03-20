@@ -45,8 +45,7 @@ RSpec.describe 'api/v1/users', type: :request do
               email: { type: :string, example: 'jane@example.com' },
               password: { type: :string, example: 'secret123' },
               password_confirmation: { type: :string, example: 'secret123' },
-              department_id: { type: :integer, example: 1 },
-              role: { type: :string, enum: %w[employee manager admin], example: 'employee' }
+              department_id: { type: :integer, example: 1 }
             },
             required: %w[name email password password_confirmation]
           }
@@ -62,8 +61,7 @@ RSpec.describe 'api/v1/users', type: :request do
               email: 'jane@example.com',
               password: 'secret123',
               password_confirmation: 'secret123',
-              department_id: department.id,
-              role: 'employee'
+              department_id: department.id
             }
           }
         end
@@ -124,8 +122,7 @@ RSpec.describe 'api/v1/users', type: :request do
             properties: {
               name: { type: :string, example: 'Updated Name' },
               email: { type: :string, example: 'updated@example.com' },
-              department_id: { type: :integer, example: 1 },
-              role: { type: :string, enum: %w[employee manager admin] }
+              department_id: { type: :integer, example: 1 }
             }
           }
         }
