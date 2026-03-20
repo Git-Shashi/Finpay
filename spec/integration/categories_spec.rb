@@ -1,6 +1,8 @@
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/categories', type: :request do
+  include_context 'swagger auth'
+
   path '/api/v1/categories' do
     get 'List all categories' do
       tags 'Categories'
@@ -8,21 +10,16 @@ RSpec.describe 'api/v1/categories', type: :request do
       security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '200', 'categories listed' do
-        schema type: :object,
-               properties: {
-                 data: {
-                   type: :array,
-                   items: {
-                     type: :object,
-                     properties: {
-                       id: { type: :integer },
-                       name: { type: :string },
-                       created_at: { type: :string, format: 'date-time' },
-                       updated_at: { type: :string, format: 'date-time' }
-                     },
-                     required: %w[id name]
-                   }
-                 }
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   name: { type: :string },
+                   created_at: { type: :string, format: :string },
+                   updated_at: { type: :string, format: :string }
+                 },
+                 required: %w[id name]
                }
 
         run_test!
@@ -71,17 +68,12 @@ RSpec.describe 'api/v1/categories', type: :request do
       response '200', 'category found' do
         schema type: :object,
                properties: {
-                 data: {
-                   type: :object,
-                   properties: {
-                     id: { type: :integer },
-                     name: { type: :string },
-                     created_at: { type: :string, format: 'date-time' },
-                     updated_at: { type: :string, format: 'date-time' }
-                   },
-                   required: %w[id name]
-                 }
-               }
+                 id: { type: :integer },
+                 name: { type: :string },
+                 created_at: { type: :string, format: :string },
+                 updated_at: { type: :string, format: :string }
+               },
+               required: %w[id name]
 
         let(:id) { create(:category).id }
         run_test!

@@ -1,6 +1,8 @@
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/companies', type: :request do
+  include_context 'swagger auth'
+
   path '/api/v1/companies' do
     get 'List all companies' do
       tags 'Companies'
@@ -8,20 +10,15 @@ RSpec.describe 'api/v1/companies', type: :request do
       security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '200', 'companies listed' do
-        schema type: :object,
-               properties: {
-                 data: {
-                   type: :array,
-                   items: {
-                     type: :object,
-                     properties: {
-                       id: { type: :integer },
-                       name: { type: :string },
-                       subdomain: { type: :string }
-                     },
-                     required: %w[id name subdomain]
-                   }
-                 }
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   name: { type: :string },
+                   subdomain: { type: :string }
+                 },
+                 required: %w[id name subdomain]
                }
 
         run_test!
@@ -71,16 +68,11 @@ RSpec.describe 'api/v1/companies', type: :request do
       response '200', 'company found' do
         schema type: :object,
                properties: {
-                 data: {
-                   type: :object,
-                   properties: {
-                     id: { type: :integer },
-                     name: { type: :string },
-                     subdomain: { type: :string }
-                   },
-                   required: %w[id name subdomain]
-                 }
-               }
+                 id: { type: :integer },
+                 name: { type: :string },
+                 subdomain: { type: :string }
+               },
+               required: %w[id name subdomain]
 
         let(:id) { create(:company).id }
         run_test!

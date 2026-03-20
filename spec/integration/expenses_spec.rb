@@ -1,6 +1,8 @@
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/expenses', type: :request do
+  include_context 'swagger auth'
+
   # Shared expense schema used in multiple responses
   let(:expense_schema) do
     {
@@ -70,6 +72,9 @@ RSpec.describe 'api/v1/expenses', type: :request do
       end
 
       response '401', 'unauthorized' do
+        let(:'access-token') { nil }
+        let(:client)         { nil }
+        let(:uid)            { nil }
         run_test!
       end
     end
@@ -103,7 +108,7 @@ RSpec.describe 'api/v1/expenses', type: :request do
               amount: 150.00,
               description: 'Flight to client meeting',
               expense_date: '2026-03-17',
-              category_id: create(:category).id
+              category_id: create(:category).id  # category is in company_beta via before hook
             }
           }
         end
@@ -191,6 +196,12 @@ RSpec.describe 'api/v1/expenses', type: :request do
       end
 
       response '403', 'forbidden - admin only' do
+        let(:employee)         { create(:user) }
+        let(:employee_headers) { employee; post('/api/v1/auth/sign_in', params: { email: employee.email, password: 'password123' }, headers: { 'X-Company-Id' => 'beta' }); response.headers.to_h }
+        let(:'access-token')   { employee_headers['access-token'] }
+        let(:client)           { employee_headers['client'] }
+        let(:uid)              { employee_headers['uid'] }
+        let(:id)               { create(:expense).id }
         run_test!
       end
 
@@ -225,6 +236,13 @@ RSpec.describe 'api/v1/expenses', type: :request do
       end
 
       response '403', 'forbidden - admin only' do
+        let(:employee)         { create(:user) }
+        let(:employee_headers) { employee; post('/api/v1/auth/sign_in', params: { email: employee.email, password: 'password123' }, headers: { 'X-Company-Id' => 'beta' }); response.headers.to_h }
+        let(:'access-token')   { employee_headers['access-token'] }
+        let(:client)           { employee_headers['client'] }
+        let(:uid)              { employee_headers['uid'] }
+        let(:id)               { create(:expense).id }
+        let(:reject_params)    { {} }
         run_test!
       end
     end
@@ -245,6 +263,12 @@ RSpec.describe 'api/v1/expenses', type: :request do
       end
 
       response '403', 'forbidden - admin only' do
+        let(:employee)         { create(:user) }
+        let(:employee_headers) { employee; post('/api/v1/auth/sign_in', params: { email: employee.email, password: 'password123' }, headers: { 'X-Company-Id' => 'beta' }); response.headers.to_h }
+        let(:'access-token')   { employee_headers['access-token'] }
+        let(:client)           { employee_headers['client'] }
+        let(:uid)              { employee_headers['uid'] }
+        let(:id)               { create(:expense).id }
         run_test!
       end
     end
@@ -265,6 +289,12 @@ RSpec.describe 'api/v1/expenses', type: :request do
       end
 
       response '403', 'forbidden - admin only' do
+        let(:employee)         { create(:user) }
+        let(:employee_headers) { employee; post('/api/v1/auth/sign_in', params: { email: employee.email, password: 'password123' }, headers: { 'X-Company-Id' => 'beta' }); response.headers.to_h }
+        let(:'access-token')   { employee_headers['access-token'] }
+        let(:client)           { employee_headers['client'] }
+        let(:uid)              { employee_headers['uid'] }
+        let(:id)               { create(:expense).id }
         run_test!
       end
     end
@@ -280,26 +310,21 @@ RSpec.describe 'api/v1/expenses', type: :request do
       security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '200', 'receipts listed' do
-        schema type: :object,
-               properties: {
-                 data: {
-                   type: :array,
-                   items: {
-                     type: :object,
-                     properties: {
-                       id: { type: :integer },
-                       amount: { type: :number },
-                       receipt_date: { type: :string, format: 'date' },
-                       notes: { type: :string, nullable: true },
-                       status: { type: :string },
-                       processed_at: { type: :string, format: 'date-time', nullable: true },
-                       file_url: { type: :string, nullable: true }
-                     }
-                   }
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   amount: { type: :number },
+                   receipt_date: { type: :string, format: 'date' },
+                   notes: { type: :string, nullable: true },
+                   status: { type: :string },
+                   processed_at: { type: :string, format: 'date-time', nullable: true },
+                   file_url: { type: :string, nullable: true }
                  }
                }
 
-        let(:id) { create(:expense).id }
+        let(:id) { create(:expense, user: auth_user).id }
         run_test!
       end
     end
@@ -322,7 +347,17 @@ RSpec.describe 'api/v1/expenses', type: :request do
       }
 
       response '201', 'receipt uploaded' do
-        let(:id) { create(:expense).id }
+        let(:id) { create(:expense, user: auth_user).id }
+        let(:receipt) do
+          {
+            amount: 50.00,
+            receipt_date: '2026-03-17',
+            notes: 'Test receipt',
+            file: Rack::Test::UploadedFile.new(
+              Rails.root.join('spec/fixtures/files/test.pdf'), 'application/pdf'
+            )
+          }
+        end
         run_test!
       end
     end
@@ -337,14 +372,14 @@ RSpec.describe 'api/v1/expenses', type: :request do
       security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '204', 'receipt deleted' do
-        let(:expense) { create(:expense) }
+        let(:expense) { create(:expense, user: auth_user) }
         let(:id) { expense.id }
         let(:receipt_id) { create(:receipt, expense: expense).id }
         run_test!
       end
 
       response '404', 'receipt not found' do
-        let(:id) { create(:expense).id }
+        let(:id) { create(:expense, user: auth_user).id }
         let(:receipt_id) { 0 }
         run_test!
       end

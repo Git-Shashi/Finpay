@@ -1,6 +1,8 @@
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/users', type: :request do
+  include_context 'swagger auth'
+
   path '/api/v1/users' do
     get 'List all users' do
       tags 'Users'
@@ -8,21 +10,16 @@ RSpec.describe 'api/v1/users', type: :request do
       security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '200', 'users listed' do
-        schema type: :object,
-               properties: {
-                 data: {
-                   type: :array,
-                   items: {
-                     type: :object,
-                     properties: {
-                       id: { type: :integer },
-                       name: { type: :string },
-                       email: { type: :string },
-                       role: { type: :string, enum: %w[employee manager admin] }
-                     },
-                     required: %w[id name email role]
-                   }
-                 }
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   name: { type: :string },
+                   email: { type: :string },
+                   role: { type: :string, enum: %w[employee manager admin] }
+                 },
+                 required: %w[id name email role]
                }
 
         run_test!
@@ -86,17 +83,12 @@ RSpec.describe 'api/v1/users', type: :request do
       response '200', 'user found' do
         schema type: :object,
                properties: {
-                 data: {
-                   type: :object,
-                   properties: {
-                     id: { type: :integer },
-                     name: { type: :string },
-                     email: { type: :string },
-                     role: { type: :string }
-                   },
-                   required: %w[id name email role]
-                 }
-               }
+                 id: { type: :integer },
+                 name: { type: :string },
+                 email: { type: :string },
+                 role: { type: :string }
+               },
+               required: %w[id name email role]
 
         let(:id) { create(:user).id }
         run_test!

@@ -1,6 +1,8 @@
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/departments', type: :request do
+  include_context 'swagger auth'
+
   path '/api/v1/departments' do
     get 'List all departments' do
       tags 'Departments'
@@ -8,19 +10,14 @@ RSpec.describe 'api/v1/departments', type: :request do
       security [{ token_auth: [], client_auth: [], uid_auth: [], company_id: [] }]
 
       response '200', 'departments listed' do
-        schema type: :object,
-               properties: {
-                 data: {
-                   type: :array,
-                   items: {
-                     type: :object,
-                     properties: {
-                       id: { type: :integer },
-                       name: { type: :string }
-                     },
-                     required: %w[id name]
-                   }
-                 }
+        schema type: :array,
+               items: {
+                 type: :object,
+                 properties: {
+                   id: { type: :integer },
+                   name: { type: :string }
+                 },
+                 required: %w[id name]
                }
 
         run_test!
@@ -69,15 +66,10 @@ RSpec.describe 'api/v1/departments', type: :request do
       response '200', 'department found' do
         schema type: :object,
                properties: {
-                 data: {
-                   type: :object,
-                   properties: {
-                     id: { type: :integer },
-                     name: { type: :string }
-                   },
-                   required: %w[id name]
-                 }
-               }
+                 id: { type: :integer },
+                 name: { type: :string }
+               },
+               required: %w[id name]
 
         let(:id) { create(:department).id }
         run_test!
