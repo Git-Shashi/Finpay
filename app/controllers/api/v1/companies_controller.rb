@@ -22,7 +22,10 @@ module Api
       end
 
       def destroy
-        Apartment::Tenant.drop(company.schema_name) if company.schema_name.present?
+        if company.schema_name.present?
+          schema_exists = ActiveRecord::Base.connection.schema_names.include?(company.schema_name)
+          Apartment::Tenant.drop(company.schema_name) if schema_exists
+        end
         company.destroy
         render_message I18n.t("companies.deleted")
       end
