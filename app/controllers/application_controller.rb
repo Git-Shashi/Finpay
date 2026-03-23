@@ -2,6 +2,7 @@ class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
   include ErrorHandler
   include ApiResponder
+  include Pundit
 
   before_action { set_user_by_token(:api_v1_user) }
 
