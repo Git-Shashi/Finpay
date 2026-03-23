@@ -37,7 +37,7 @@ class Expense < ApplicationRecord
     event :archive do
       transitions from: [:pending, :approved, :rejected, :reimbursed], to: :archived
 
-      after do 
+      after do
         update(deleted_at: Time.current)
       end
     end

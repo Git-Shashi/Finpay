@@ -108,7 +108,7 @@ RSpec.describe 'api/v1/expenses', type: :request do
               amount: 150.00,
               description: 'Flight to client meeting',
               expense_date: '2026-03-17',
-              category_id: create(:category).id  # category is in company_beta via before hook
+              category_id: create(:category).id # category is in company_beta via before hook
             }
           }
         end
@@ -197,7 +197,12 @@ RSpec.describe 'api/v1/expenses', type: :request do
 
       response '403', 'forbidden - admin only' do
         let(:employee)         { create(:user) }
-        let(:employee_headers) { employee; post('/api/v1/auth/sign_in', params: { email: employee.email, password: 'password123' }, headers: { 'X-Company-Id' => 'beta' }); response.headers.to_h }
+        let(:employee_headers) do
+          employee
+          post('/api/v1/auth/sign_in', params: { email: employee.email, password: 'password123' },
+                                       headers: { 'X-Company-Id' => 'beta' })
+          response.headers.to_h
+        end
         let(:'access-token')   { employee_headers['access-token'] }
         let(:client)           { employee_headers['client'] }
         let(:uid)              { employee_headers['uid'] }
@@ -237,7 +242,12 @@ RSpec.describe 'api/v1/expenses', type: :request do
 
       response '403', 'forbidden - admin only' do
         let(:employee)         { create(:user) }
-        let(:employee_headers) { employee; post('/api/v1/auth/sign_in', params: { email: employee.email, password: 'password123' }, headers: { 'X-Company-Id' => 'beta' }); response.headers.to_h }
+        let(:employee_headers) do
+          employee
+          post('/api/v1/auth/sign_in', params: { email: employee.email, password: 'password123' },
+                                       headers: { 'X-Company-Id' => 'beta' })
+          response.headers.to_h
+        end
         let(:'access-token')   { employee_headers['access-token'] }
         let(:client)           { employee_headers['client'] }
         let(:uid)              { employee_headers['uid'] }
@@ -264,7 +274,12 @@ RSpec.describe 'api/v1/expenses', type: :request do
 
       response '403', 'forbidden - admin only' do
         let(:employee)         { create(:user) }
-        let(:employee_headers) { employee; post('/api/v1/auth/sign_in', params: { email: employee.email, password: 'password123' }, headers: { 'X-Company-Id' => 'beta' }); response.headers.to_h }
+        let(:employee_headers) do
+          employee
+          post('/api/v1/auth/sign_in', params: { email: employee.email, password: 'password123' },
+                                       headers: { 'X-Company-Id' => 'beta' })
+          response.headers.to_h
+        end
         let(:'access-token')   { employee_headers['access-token'] }
         let(:client)           { employee_headers['client'] }
         let(:uid)              { employee_headers['uid'] }
@@ -290,7 +305,12 @@ RSpec.describe 'api/v1/expenses', type: :request do
 
       response '403', 'forbidden - admin only' do
         let(:employee)         { create(:user) }
-        let(:employee_headers) { employee; post('/api/v1/auth/sign_in', params: { email: employee.email, password: 'password123' }, headers: { 'X-Company-Id' => 'beta' }); response.headers.to_h }
+        let(:employee_headers) do
+          employee
+          post('/api/v1/auth/sign_in', params: { email: employee.email, password: 'password123' },
+                                       headers: { 'X-Company-Id' => 'beta' })
+          response.headers.to_h
+        end
         let(:'access-token')   { employee_headers['access-token'] }
         let(:client)           { employee_headers['client'] }
         let(:uid)              { employee_headers['uid'] }
