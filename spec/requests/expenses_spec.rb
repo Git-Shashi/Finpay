@@ -251,10 +251,10 @@ RSpec.describe Api::V1::ExpensesController, type: :request do
       expect(response).to have_http_status(:ok)
     end
 
-    it 'returns 404 if expense does not belong to current user' do
+    it 'returns 403 if expense does not belong to current user' do
       other_expense = Apartment::Tenant.switch('company_beta') { create(:expense) }
       get "/api/v1/expenses/#{other_expense.id}/receipts", headers: auth_headers
-      expect(response).to have_http_status(:not_found)
+      expect(response).to have_http_status(:forbidden)
     end
   end
 
