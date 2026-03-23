@@ -14,6 +14,10 @@ module ErrorHandler
       render json: { error: e.message }, status: :forbidden
     end
 
+    rescue_from Pundit::NotAuthorizedError do |e|
+      render json: { error: e.message }, status: :forbidden
+    end
+
     rescue_from ActionController::ParameterMissing do |e|
       render json: { error: e.message }, status: :bad_request
     end

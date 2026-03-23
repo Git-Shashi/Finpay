@@ -13,23 +13,26 @@ module Api
       end
 
       def show
+        authorize expense
         render_success ExpenseSerializer.new(expense).serialize
       end
 
       def create
         expense = current_user.expenses.build(expense_params)
+        authorize expense
         expense.save!
         AuditLogWorker.perform_async(expense.id, 'created', Apartment::Tenant.current)
         render_created ExpenseSerializer.new(expense).serialize
       end
 
       def update
+        authorize expense
         expense.update!(expense_params)
         render_success ExpenseSerializer.new(expense).serialize
       end
 
       def approve
-        authorize_user!
+        authorize expense
         service = ExpenseWorkflowService.new(expense, current_user)
         if service.approve!
           render_success ExpenseSerializer.new(expense).serialize
@@ -39,7 +42,7 @@ module Api
       end
 
       def reject
-        authorize_user!
+        authorize expense
         service = ExpenseWorkflowService.new(expense, current_user)
         if service.reject!(params[:reason])
           render_success ExpenseSerializer.new(expense).serialize
@@ -49,7 +52,7 @@ module Api
       end
 
       def reimburse
-        authorize_user!
+        authorize expense
         service = ExpenseWorkflowService.new(expense, current_user)
         if service.reimburse!
           render_success ExpenseSerializer.new(expense).serialize
@@ -59,7 +62,7 @@ module Api
       end
 
       def archive
-        authorize_user!
+        authorize expense
         service = ExpenseWorkflowService.new(expense, current_user)
         if service.archive!
           render_success ExpenseSerializer.new(expense).serialize
@@ -69,35 +72,35 @@ module Api
       end
 
       def destroy
+        authorize expense
         expense.destroy
         render_no_content
       end
 
       # Receipt actions (nested under expenses)
       def receipts
-        render_success ReceiptSerializer.new(scoped_expense.receipts).serialize
+        authorize expense, :receipts?
+        render_success ReceiptSerializer.new(expense.receipts).serialize
       end
 
       def create_receipt
-        receipt = scoped_expense.receipts.create!(receipt_params)
-        ReceiptProcessorWorker.perform_async(scoped_expense.id, receipt.id, Apartment::Tenant.current)
+        authorize expense, :create_receipt?
+        receipt = expense.receipts.create!(receipt_params)
+        ReceiptProcessorWorker.perform_async(expense.id, receipt.id, Apartment::Tenant.current)
         render_created ReceiptSerializer.new(receipt).serialize
       end
 
       def destroy_receipt
-        receipt = scoped_expense.receipts.find(params[:receipt_id])
+        authorize expense, :destroy_receipt?
+        receipt = expense.receipts.find(params[:receipt_id])
         receipt.destroy
         render_no_content
       end
 
       private
 
-      def authorize_user!
-        raise UnauthorizedError, I18n.t('expenses.errors.not_authorized') unless current_user.admin?
-      end
-
       def filtered_expenses
-        expenses = Expense.includes(:user, :category, :receipts)
+        expenses = policy_scope(Expense).includes(:user, :category, :receipts)
 
         expenses = expenses.by_category(params[:category_id]) if params[:category_id].present?
         expenses = expenses.by_status(params[:status]) if params[:status].present?
@@ -119,10 +122,6 @@ module Api
 
       def receipt_params
         params.require(:receipt).permit(:file, :amount, :receipt_date, :notes)
-      end
-
-      def scoped_expense
-        @scoped_expense ||= current_user.expenses.find(params[:id])
       end
 
       def pagination_meta(expenses)
